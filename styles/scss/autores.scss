@@ -1,75 +1,103 @@
 // =============================================================
-// autores.scss — listagem de autores
+// autores.scss — listagem de autores (valores do protótipo v14)
+// Os estilos do retrato provisório também servem o perfil (autor.scss).
 // =============================================================
 @use 'variables' as *;
-@use 'typography' as *;
+@use 'author-portrait';
 
-.authors-section { padding: 20px 0 60px; }
+.authors-page .page-intro p {
+  font: italic 400 clamp(20px, 2.1vw, 28px)/1.45 var(--font-literary);
+  max-width: 650px;
+  margin-bottom: 12px;
+}
+
+.authors-section {
+  border-top: 1px solid var(--line);
+  padding: 26px 0 64px;
+}
+
+.authors-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  color: var(--muted);
+}
 
 .authors-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 36px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 52px 42px;
+}
+
+.author-card-link { display: block; height: 100%; }
+
+.author-card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 18px;
 }
 
 .author-card {
-  .author-card-link {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    color: var(--text);
-  }
-
-  .author-portrait {
-    aspect-ratio: 4/5;
-    background: $soft;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    color: $brick;
-
-    &.tone-1 { background: $royal; color: #f9f1ea; }
-    &.tone-2 { background: $green; color: #f9f1ea; }
-
-    img { width: 100%; height: 100%; object-fit: cover; }
-
-    // Iniciais provisórias — elemento gráfico, fora da escala tipográfica
-    .author-initials {
-      font-family: var(--font-literary);
-      font-weight: var(--weight-body);
-      font-size: 90px;
-      line-height: 1;
-    }
-  }
-
-  .author-card-meta {
-    @include type(label);
-    display: flex;
-    justify-content: space-between;
-    color: var(--muted);
-    padding-top: 8px;
-    border-top: 1px solid var(--line);
-  }
-
   h2 {
-    @include type(display-4);
-    margin: 2px 0;
+    font: var(--weight-display) 28px/1.2 var(--font-display);
+    letter-spacing: -.04em;
+    color: var(--ink);
+    margin: 10px 0 12px;
   }
 
   p {
-    @include type(body-s);
+    font-size: 16px;
+    line-height: 1.6;
     color: var(--muted);
-    margin: 0 0 10px;
+    margin: 0;
+    max-width: 39ch;
   }
 
-  .text-link { align-self: flex-start; }
+  .text-link {
+    margin-top: 18px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+.author-card-link:hover, .author-card-link:focus-visible {
+  .author-initials { transform: translateX(-.04em) translateY(-5px); }
+  .text-link { color: var(--hover-ink); }
+}
+
+.authors-note {
+  max-width: 800px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  margin-top: 44px;
+  font-size: 14px;
+}
+
+@media (max-width: $bp-xl) {
+  .authors-grid { gap: 42px 26px; }
 }
 
 @media (max-width: $bp-md) {
-  .authors-grid { grid-template-columns: 1fr; }
+  .authors-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 38px 22px; }
+  .authors-intro { align-items: start; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .authors-intro .eyebrow { font-size: 12px; letter-spacing: .08em; }
+  .author-card h2 { font-size: 25px; }
+  .author-card-meta { flex-wrap: wrap; font-size: 12px; }
+  .author-card-meta > span:last-child { display: none; }
+  .authors-note { margin-top: 32px; }
 }
 
-@media (min-width: #{$bp-md + 1}) and (max-width: $bp-lg) {
-  .authors-grid { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 480px) {
+  .authors-grid { grid-template-columns: 1fr; gap: 38px; }
+  .author-card .author-portrait { max-height: 440px; }
+  .author-card h2 { font-size: 28px; }
+  .author-card-meta { font-size: 13px; }
+  .author-card p { max-width: none; }
+  .authors-page .page-intro p { font-size: 23px; }
 }

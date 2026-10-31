@@ -1,64 +1,62 @@
 // =============================================================
-// sobre.scss — página institucional
+// sobre.scss — página institucional (valores do protótipo v14)
 // =============================================================
 @use 'variables' as *;
-@use 'typography' as *;
-
-.institutional-page {
-  padding-bottom: 60px;
-}
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 48px;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 70px;
   padding: 20px 0 50px;
-  align-items: start;
 }
 
 .about-symbol {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
   background: var(--green);
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--paper);  // o símbolo herda via currentColor
+  color: var(--paper);
+  font-size: 0;
 
-  .til {
-    display: block;
-    width: 72%;
-    height: 140px;
-  }
+  .til { width: 65%; height: 140px; }
 }
 
-// Parágrafo de abertura do institucional
 .about-copy p {
-  @include type(body-l);
-  max-width: 60ch;
-  margin: 0;
+  font-size: 21px;
+  line-height: 1.65;
+  margin: 0 0 24px;
 }
 
 .identity-story {
-  padding: 36px 0;
+  display: block;
+  padding: 32px 0;
   border-top: 1px solid var(--line);
 
+  > div:last-child { max-width: 900px; }
+
   h2 {
-    @include type(display-3);
+    font: var(--weight-display) clamp(28px, 3.2vw, 44px)/1.16 var(--font-display);
+    letter-spacing: -.035em;
     margin: 0 0 20px;
-    max-width: 25ch;
+    color: var(--ink);
   }
 
   p {
+    max-width: 76ch;
+    font-size: 18px;
+    line-height: 1.65;
     color: var(--muted);
     margin: 0 0 18px;
-    max-width: 76ch;
 
     &:last-child { margin-bottom: 0; }
   }
 }
 
 @media (max-width: $bp-md) {
-  .about-grid { grid-template-columns: 1fr; gap: 24px; }
-  .about-symbol .til { height: 90px; }
-  .identity-story { padding: 28px 0; }
+  .about-grid { grid-template-columns: 1fr; gap: 30px; }
+  .about-symbol { min-height: 220px; .til { height: 90px; } }
+  .about-copy p { font-size: 18px; }
+  .identity-story { padding: 32px 0; }
+  .identity-story h2 { font-size: 30px; }
+  .identity-story p { font-size: 17px; }
 }

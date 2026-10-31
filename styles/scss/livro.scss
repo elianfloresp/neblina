@@ -1,194 +1,91 @@
 // =============================================================
-// livro.scss — ficha individual de livro
+// livro.scss — ficha do livro (valores do protótipo v14)
 // =============================================================
 @use 'variables' as *;
-@use 'typography' as *;
 
-.book-detail-wrapper {
-  .book-back {
-    padding: 24px 0 0;
-
-    .text-link { padding: 6px 0; }
-  }
-}
+.book-back { padding-top: 30px; }
 
 .book-detail {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 80px;
   padding: 45px 0 70px;
-  align-items: start;
 
-  > * { min-width: 0; }  // impede palavra longa de esticar a coluna da grade
+  > * { min-width: 0; }  // palavra longa não estica a coluna
+}
 
-  .detail-art {
-    background: $soft;
-    min-height: 590px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.detail-art {
+  background: var(--soft);
+  min-height: 590px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    img {
-      max-width: 75%;
-      max-height: 85%;
-      object-fit: contain;
-      box-shadow: 10px 14px 24px #02020133;
-    }
+  img { max-width: 75%; max-height: 90%; object-fit: contain; }
 
-    // Capa provisória (quando o livro não tem imagem)
-    .cover {
-      width: 260px;
-      height: 370px;
-      background: $brick;
-      color: #fff0df;
-      padding: 30px;
-      transform: rotate(-4deg);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-shadow: 7px 10px 13px #382a2529;
+  .cover {
+    width: 260px;
+    height: 370px;
+    transform: rotate(-4deg);
+    padding: 30px;
 
-      small { @include type(label); }
-      strong { @include type(display-3); }
-    }
-  }
-
-  .book-info {
-    .book-eyebrow { color: var(--royal); }
-
-    h1 {
-      @include type(display-2);
-      color: var(--ink);
-      margin: 14px 0 10px;
-    }
-
-    .book-author {
-      color: var(--muted);
-      margin: 0 0 24px;
-
-      a {
-        color: var(--muted);
-        border-bottom: 1px solid currentColor;
-        padding-bottom: 1px;
-
-        &:hover { color: var(--royal); }
-      }
-    }
-
-    .book-section-title {
-      @include type(title);
-      color: var(--ink);
-      margin: 28px 0 10px;
-    }
-
-    .book-synopsis {
-      color: var(--muted);
-      max-width: 60ch;
-    }
-
-    // Botão retangular na cor ink (como no protótipo)
-    .button {
-      background: var(--ink);
-      color: var(--paper) !important;
-      padding: 14px 25px;
-      border: 1px solid var(--ink);
-      border-radius: 0;
-      margin: 18px 0 10px;
-      transition: background .22s, border-color .22s, color .22s;
-
-      &:hover:not([disabled]) {
-        background: var(--royal);
-        border-color: var(--royal);
-        color: #fff5e9 !important;
-      }
-
-      &[disabled] {
-        opacity: .6;
-        cursor: not-allowed;
-      }
-    }
-
-    .note { margin: 4px 0 0; }
-
-    // Grid de metadados: 2 colunas, uma linha no topo do bloco
-    .editorial-data {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-top: 1px solid var(--line);
-      gap: 15px 32px;
-      padding-top: 20px;
-      margin: 10px 0 30px;
-
-      dt {
-        @include type(label);
-        color: var(--muted);
-        margin-bottom: 4px;
-      }
-      dd {
-        @include type(body-s);
-        margin: 0;
-        color: var(--text);
-      }
-    }
-
-    // Fragmento de leitura expansível
-    details {
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      padding: 14px 0;
-      margin-top: 10px;
-
-      summary {
-        @include type(ui);
-        cursor: pointer;
-        color: var(--ink);
-        list-style: revert;
-      }
-
-      // Trecho do livro = citação: itálico literário
-      .book-excerpt {
-        @include type(excerpt);
-        padding: 20px 0 4px;
-        color: var(--text);
-        max-width: 60ch;
-      }
-    }
+    strong { font-size: 38px; }
+    .brand-symbol { width: 120px; height: 42px; }
   }
 }
 
-// Navegação anterior/próximo
+.book-info {
+  h1 {
+    font: var(--weight-display) clamp(36px, 4vw, 58px)/1.07 var(--font-display);
+    letter-spacing: -.04em;
+    color: var(--ink);
+    margin: 20px 0;
+  }
+
+  h2 { font-size: 18px; margin-top: 30px; }
+  p { color: var(--muted); font-size: 16px; }
+  p a { border-bottom: 1px solid; transition: color .22s; }
+  p a:hover { color: var(--hover-ink); }
+}
+
+.editorial-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--line);
+  gap: 15px;
+  padding-top: 20px;
+  font-size: 14px;
+  margin: 0;
+
+  dt { color: var(--muted); font-size: 12px; }
+  dd { margin: 0; }
+}
+
+details {
+  border-block: 1px solid var(--line);
+  padding: 16px 0;
+  margin-top: 25px;
+}
+summary { cursor: pointer; font-size: 14px; }
+
 .book-sequence {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  padding: 24px 0 60px;
-  border-top: 1px solid var(--line);
-
-  a {
-    @include type(ui);
-    color: var(--ink);
-
-    span {
-      @include type(caption);
-      display: block;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-  }
+  padding: 0 0 35px;
 
   a:last-child { text-align: right; }
+  span { display: block; font-size: 13px; color: var(--muted); }
+}
+
+@media (max-width: $bp-lg) {
+  .book-detail { gap: 38px; }
+  .detail-art { min-height: 520px; }
 }
 
 @media (max-width: $bp-md) {
-  .book-detail {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding: 25px 0 48px;
-
-    .detail-art { min-height: 450px; }
-    .detail-art .cover { width: 220px; height: 310px; padding: 24px; }
-    .book-info .editorial-data { grid-template-columns: 1fr; }
-  }
-
-  .book-sequence { grid-template-columns: 1fr; gap: 16px; }
+  .book-detail { grid-template-columns: 1fr; gap: 30px; padding-top: 25px; }
+  .detail-art { min-height: 450px; }
+  .detail-art .cover { width: 220px; height: 310px; }
+  .book-sequence { gap: 16px; }
 }

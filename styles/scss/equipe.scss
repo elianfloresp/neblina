@@ -1,11 +1,4 @@
 // =============================================================
-// equipe.scss — página equipe (3 pessoas)
-// Tipografia herdada do .team-grid em global.scss.
+// equipe.scss — página Equipe. Estilos da grade ficam em global.scss
+// (a home usa a mesma grade).
 // =============================================================
-@use 'variables' as *;
-
-.team-grid.team-grid-full {
-  .person p {
-    max-width: 42ch;
-  }
-}

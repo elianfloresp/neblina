@@ -1,6 +1,4 @@
 // =============================================================
-// catalogo.scss — página de listagem de livros
+// catalogo.scss — página do catálogo. Cards e paginação ficam em
+// global.scss (a home e a ficha do livro usam a mesma grade).
 // =============================================================
-@use 'variables' as *;
-
-.page-intro { border-bottom: 1px solid var(--line); }
