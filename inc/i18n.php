@@ -57,11 +57,10 @@ function neblina_field($field_name, $post_id = null) {
 function neblina_i($key) {
     static $strings = null;
     if ($strings === null) {
-        // Frases literais do protótipo v14 (app.js / authors.js).
+        // Base: frases do protótipo v14, sem os avisos de demonstração.
         $strings = [
             // Estrutura
             'skip_to_content'  => ['es' => 'Saltar al contenido',          'pt' => 'Pular para o conteúdo'],
-            'prototype_notice' => ['es' => 'PROTOTIPO CONCEPTUAL · CONTENIDOS PENDIENTES DE VALIDACIÓN', 'pt' => 'PROTÓTIPO CONCEITUAL · CONTEÚDOS PENDENTES DE VALIDAÇÃO'],
             'primary_nav'      => ['es' => 'Navegación principal',         'pt' => 'Navegação principal'],
             'home'             => ['es' => 'Inicio',                       'pt' => 'Início'],
             'home_lower'       => ['es' => 'inicio',                       'pt' => 'início'],
@@ -73,7 +72,7 @@ function neblina_i($key) {
             'nav_about'        => ['es' => 'Nosotros',                     'pt' => 'Sobre'],
             'nav_team'         => ['es' => 'Equipo',                       'pt' => 'Equipe'],
             'nav_contact'      => ['es' => 'Contacto',                     'pt' => 'Contato'],
-            'footer_credits'   => ['es' => 'Dirección creativa inicial · No es la web definitiva', 'pt' => 'Direção criativa inicial · Não é o site definitivo'],
+            'footer_rights'    => ['es' => 'Todos los derechos reservados', 'pt' => 'Todos os direitos reservados'],
             'error_404_title'  => ['es' => 'Página no encontrada.',        'pt' => 'Página não encontrada.'],
             'back_to_home'     => ['es' => 'Volver al inicio',             'pt' => 'Voltar ao início'],
             'fallback_text'    => ['es' => 'Contenido en construcción.',   'pt' => 'Conteúdo em construção.'],
@@ -90,14 +89,13 @@ function neblina_i($key) {
             'catalog_kicker'   => ['es' => 'NUESTROS LIBROS',              'pt' => 'NOSSOS LIVROS'],
             'catalog_title'    => ['es' => 'El catálogo.',                 'pt' => 'O catálogo.'],
             'catalog_lead'     => ['es' => 'Voces brasileñas, nuevas travesías.', 'pt' => 'Vozes brasileiras, novas travessias.'],
-            'catalog_note'     => ['es' => 'Referencias de presentación extraídas del Key Visual de Neblina. Los títulos y las imágenes ilustran la identidad; las ediciones, traducciones y fechas del catálogo oficial están pendientes de confirmación.', 'pt' => 'Referências de apresentação extraídas do Key Visual da Neblina. Títulos e imagens ilustram a identidade; edições, traduções e datas do catálogo oficial dependem de confirmação.'],
-            'card_meta'        => ['es' => 'ESTUDIO DEL KEY VISUAL',       'pt' => 'ESTUDO DO KEY VISUAL'],
+            'card_meta'        => ['es' => 'NEBLINA EDITORIAL',            'pt' => 'NEBLINA EDITORIAL'],
             'see_sheet'        => ['es' => 'Ver ficha:',                   'pt' => 'Ver ficha:'],
             'know_book'        => ['es' => 'Conocer el libro',             'pt' => 'Conhecer o livro'],
-            'cover_of'         => ['es' => 'Referencia visual de',         'pt' => 'Referência visual de'],
+            'cover_of'         => ['es' => 'Portada de',                   'pt' => 'Capa de'],
             'cover_kicker'     => ['es' => 'NEBLINA EDITORIAL',            'pt' => 'NEBLINA EDITORIAL'],
             'cover_title'      => ['es' => 'Un libro<br>por venir.',       'pt' => 'Um livro<br>por vir.'],
-            'cover_provisional'=> ['es' => 'CUBIERTA PROVISIONAL',         'pt' => 'CAPA PROVISÓRIA'],
+            'cover_soon'       => ['es' => 'PRÓXIMAMENTE',                 'pt' => 'EM BREVE'],
             'showing'          => ['es' => 'Mostrando',                    'pt' => 'Mostrando'],
             'of'               => ['es' => 'de',                           'pt' => 'de'],
             'books_lower'      => ['es' => 'libros',                       'pt' => 'livros'],
@@ -106,18 +104,16 @@ function neblina_i($key) {
             'prev'             => ['es' => '← Anterior',                   'pt' => '← Anterior'],
             'next'             => ['es' => 'Siguiente →',                  'pt' => 'Próxima →'],
             'back_to_catalog'  => ['es' => 'Volver al catálogo',           'pt' => 'Voltar ao catálogo'],
-            'visual_reference' => ['es' => 'REFERENCIA VISUAL',            'pt' => 'REFERÊNCIA VISUAL'],
-            'about_reference'  => ['es' => 'Sobre la referencia',          'pt' => 'Sobre a referência'],
+            'about_book'       => ['es' => 'Sobre el libro',               'pt' => 'Sobre o livro'],
             'buy'              => ['es' => 'Comprar libro — sitio externo','pt' => 'Comprar — site externo'],
             'buy_disabled'     => ['es' => 'Comprar libro',                'pt' => 'Comprar'],
-            'buy_pending'      => ['es' => 'Enlace de compra pendiente. No hay venta activa en este prototipo.', 'pt' => 'Link de compra pendente. Não há venda ativa neste protótipo.'],
+            'buy_soon'         => ['es' => 'Disponible próximamente.',     'pt' => 'Disponível em breve.'],
             'editorial_info'   => ['es' => 'Información editorial',        'pt' => 'Informações editoriais'],
-            'to_confirm'       => ['es' => 'Por confirmar',                'pt' => 'A confirmar'],
             'read_excerpt'     => ['es' => 'Fragmento de lectura',         'pt' => 'Trecho de leitura'],
             'browse_books'     => ['es' => 'Navegar entre libros',         'pt' => 'Navegar entre livros'],
             'prev_book'        => ['es' => '← Libro anterior',             'pt' => '← Livro anterior'],
             'next_book'        => ['es' => 'Siguiente libro →',            'pt' => 'Próximo livro →'],
-            'other_sheets'     => ['es' => 'Otras fichas del prototipo',   'pt' => 'Outras fichas do protótipo'],
+            'other_books'      => ['es' => 'Otros libros',                 'pt' => 'Outros livros'],
 
             // Autores
             'authors_kicker'   => ['es' => 'VOCES DEL CATÁLOGO',           'pt' => 'VOZES DO CATÁLOGO'],
@@ -126,15 +122,11 @@ function neblina_i($key) {
             'authors_fronts'   => ['es' => 'FICCIÓN Y PENSAMIENTO CRÍTICO','pt' => 'FICÇÃO E PENSAMENTO CRÍTICO'],
             'curatorship'      => ['es' => 'Curaduría de estreno',         'pt' => 'Curadoria de estreia'],
             'know_author'      => ['es' => 'Conocer la voz',               'pt' => 'Conhecer a voz'],
-            'portrait_slot'    => ['es' => 'Espacio reservado para el retrato de', 'pt' => 'Espaço reservado para o retrato de'],
-            'portrait_pending' => ['es' => 'RETRATO POR INCORPORAR',       'pt' => 'RETRATO A INCORPORAR'],
-            'authors_note'     => ['es' => 'Selección inicial indicada en el texto institucional de Neblina. Presentaciones adaptadas de ese documento; retratos, títulos y datos de las ediciones pendientes de confirmación.', 'pt' => 'Curadoria inicial indicada no texto institucional da Neblina. Apresentações adaptadas desse documento; retratos, títulos e dados das edições pendentes de confirmação.'],
             'all_authors'      => ['es' => 'Todos los autores',            'pt' => 'Todos os autores'],
             'about_writing'    => ['es' => 'Sobre su escritura',           'pt' => 'Sobre a escrita'],
-            'based_on_text'    => ['es' => 'Presentación basada en el texto institucional', 'pt' => 'Apresentação baseada no texto institucional'],
+            'author_books'     => ['es' => 'Libros',                       'pt' => 'Livros'],
             'editions_heading' => ['es' => 'Ediciones en preparación',     'pt' => 'Edições em preparação'],
-            'titles_pending'   => ['es' => 'Títulos por confirmar',        'pt' => 'Títulos a confirmar'],
-            'editions_pending' => ['es' => 'Los libros de esta voz se incorporarán cuando se confirme el catálogo editorial. No hay ediciones disponibles para compra en este prototipo.', 'pt' => 'Os livros desta voz serão incluídos após a confirmação do catálogo editorial. Não há edições disponíveis para compra neste protótipo.'],
+            'editions_soon'    => ['es' => 'Los títulos de esta voz llegarán pronto al catálogo de Neblina.', 'pt' => 'Os títulos desta voz chegam em breve ao catálogo da Neblina.'],
             'other_voices'     => ['es' => 'Otras voces',                  'pt' => 'Outras vozes'],
 
             // Equipe e contato

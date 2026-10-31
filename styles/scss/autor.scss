@@ -62,14 +62,6 @@
   line-height: 1.7;
 }
 
-.authors-note {
-  max-width: 800px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-  margin-top: 44px;
-  font-size: 14px;
-}
-
 .author-other {
   border-top: 1px solid var(--line);
   padding: 25px 0 54px;
@@ -102,7 +94,6 @@
   .author-profile h1 { font-size: 48px; }
   .author-other h2 { width: 100%; }
   .author-books .section-heading { align-items: start; }
-  .authors-note { margin-top: 32px; }
 }
 
 @media (max-width: 480px) {

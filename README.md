@@ -66,7 +66,7 @@ Pronto, site acessível em `http://localhost/neblina/` (redireciona pra `/pt/` o
 neblina/
 ├── style.css                     Metadados do tema (identificação pro WP)
 ├── functions.php                 Setup geral + requires
-├── header.php                    Aviso do protótipo + header (logo, nav, ES/PT, tema)
+├── header.php                    Header (logo, nav, ES/PT, tema)
 ├── footer.php                    Footer azul (frase do manifesto, links, créditos)
 ├── index.php                     Fallback
 ├── 404.php                       Página não encontrada
@@ -158,8 +158,8 @@ Diferenças intencionais:
 - **Nenhum texto em peso 700.** Títulos de card e o nome do autor usam 500 (o protótipo usava 700 em alguns lugares; pedido de padronização do Paulo, call de 30/10).
 - **Site 100% bilíngue.** O protótipo mostrava o institucional em português mesmo na versão ES; aqui ele é traduzido.
 - **Sem o editor de banners de demonstração.** No site real, banners são cadastrados no admin.
-
-O aviso "PROTÓTIPO CONCEITUAL" (topo) e a linha "Não é o site definitivo" (rodapé) seguem a entrega v14 e saem quando o cliente aprovar o site definitivo: `header.php` e `footer_credits` em `inc/i18n.php`.
+- **Sem os avisos de protótipo.** Saíram a faixa "PROTÓTIPO CONCEITUAL", o "Não é o site definitivo" do rodapé (agora "© ano · Todos os direitos reservados") e as notas de "pendente de confirmação".
+- **Campos vazios não aparecem.** Na ficha do livro, sinopse, trecho e cada dado editorial só aparecem se preenchidos; sem link de compra, o botão fica desativado com "Disponível em breve". No perfil do autor, a seção lista os livros ligados a ele (por "Autor com página" ou pelo mesmo nome em "Nome do autor") ou mostra "em breve".
 
 ### Fontes
 

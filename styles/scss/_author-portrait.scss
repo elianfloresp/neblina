@@ -1,6 +1,6 @@
 // =============================================================
-// Retrato provisório de autor (iniciais + legenda), usado na lista
-// e no perfil. Cores por posição: bege, azul royal, verde.
+// Retrato de autor (foto ou iniciais), usado na lista e no perfil.
+// Cores por posição: bege, azul royal, verde.
 // =============================================================
 @use 'variables' as *;
 
@@ -27,20 +27,8 @@
   transform: translateX(-.04em);
 }
 
-.portrait-caption {
-  position: absolute;
-  inset: auto 20px 22px;
-  border-top: 1px solid currentColor;
-  padding-top: 12px;
-  font-size: 12px;
-  letter-spacing: .1em;
-  text-align: center;
-  opacity: .8;
-}
-
 @media (max-width: $bp-md) {
   .author-initials { font-size: clamp(72px, 14vw, 120px); }
-  .portrait-caption { font-size: 12px; letter-spacing: .04em; inset: auto 14px 16px; padding-top: 9px; }
 }
 
 @media (max-width: 480px) {

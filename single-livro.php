@@ -22,14 +22,14 @@ $autor       = neblina_book_author($livro->ID);
 $link_compra = neblina_field('link_compra', $livro->ID);
 $buy_safe    = $link_compra && preg_match('#^https://#', $link_compra);
 
-// [rótulo ES, rótulo PT, valor]
-$metadados = [
+// [rótulo ES, rótulo PT, valor] — campos vazios não aparecem na ficha
+$metadados = array_filter([
     ['Traducción', 'Tradução', neblina_field('metadados_tradutor', $livro->ID)],
     ['ISBN',       'ISBN',     get_field('metadados_isbn', $livro->ID)],
     ['Páginas',    'Páginas',  get_field('metadados_paginas', $livro->ID)],
     ['Formato',    'Formato',  neblina_field('metadados_formato', $livro->ID)],
     ['Año',        'Ano',      get_field('metadados_ano', $livro->ID)],
-];
+], fn($m) => trim((string) $m[2]) !== '');
 
 // Anterior / próximo na ordem do catálogo
 $ids  = get_posts([
@@ -53,36 +53,42 @@ $book_title = fn($id) => neblina_field('titulo', $id) ?: get_the_title($id);
         <div class="detail-art"><?php neblina_book_cover($livro->ID, $titulo); ?></div>
 
         <div class="book-info">
-            <span class="eyebrow"><?php echo neblina_i('visual_reference'); ?></span>
+            <span class="eyebrow"><?php echo neblina_i('catalog_kicker'); ?></span>
             <h1><?php echo esc_html($titulo); ?></h1>
             <?php if ($autor): ?>
                 <p><?php if ($autor['url']): ?><a href="<?php echo esc_url($autor['url']); ?>"><?php echo esc_html($autor['name']); ?></a><?php else: echo esc_html($autor['name']); endif; ?></p>
             <?php endif; ?>
 
-            <h2><?php echo neblina_i('about_reference'); ?></h2>
-            <div class="book-synopsis rich-text"><?php echo $sinopse ? wp_kses_post($sinopse) : '<p>' . esc_html(neblina_i('to_confirm')) . '</p>'; ?></div>
+            <?php if ($sinopse): ?>
+                <h2><?php echo neblina_i('about_book'); ?></h2>
+                <div class="book-synopsis rich-text"><?php echo wp_kses_post($sinopse); ?></div>
+            <?php endif; ?>
 
             <?php if ($buy_safe): ?>
                 <a class="button" href="<?php echo esc_url($link_compra); ?>" target="_blank" rel="noopener noreferrer"><?php echo neblina_i('buy'); ?></a>
             <?php else: ?>
                 <button class="button" type="button" disabled aria-describedby="buy-note"><?php echo neblina_i('buy_disabled'); ?></button>
-                <p class="note" id="buy-note"><?php echo neblina_i('buy_pending'); ?></p>
+                <p class="note" id="buy-note"><?php echo neblina_i('buy_soon'); ?></p>
             <?php endif; ?>
 
-            <h2><?php echo neblina_i('editorial_info'); ?></h2>
-            <dl class="editorial-data">
-                <?php foreach ($metadados as [$es, $pt, $valor]): ?>
-                    <div>
-                        <dt><?php echo esc_html(neblina_lang() === 'pt' ? $pt : $es); ?></dt>
-                        <dd><?php echo esc_html($valor ?: neblina_i('to_confirm')); ?></dd>
-                    </div>
-                <?php endforeach; ?>
-            </dl>
+            <?php if ($metadados): ?>
+                <h2><?php echo neblina_i('editorial_info'); ?></h2>
+                <dl class="editorial-data">
+                    <?php foreach ($metadados as [$es, $pt, $valor]): ?>
+                        <div>
+                            <dt><?php echo esc_html(neblina_lang() === 'pt' ? $pt : $es); ?></dt>
+                            <dd><?php echo esc_html($valor); ?></dd>
+                        </div>
+                    <?php endforeach; ?>
+                </dl>
+            <?php endif; ?>
 
-            <details>
-                <summary><?php echo neblina_i('read_excerpt'); ?></summary>
-                <div class="book-excerpt rich-text"><?php echo $excerto ? wp_kses_post($excerto) : '<p>' . esc_html(neblina_i('to_confirm')) . '</p>'; ?></div>
-            </details>
+            <?php if ($excerto): ?>
+                <details>
+                    <summary><?php echo neblina_i('read_excerpt'); ?></summary>
+                    <div class="book-excerpt rich-text"><?php echo wp_kses_post($excerto); ?></div>
+                </details>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -96,7 +102,7 @@ $book_title = fn($id) => neblina_field('titulo', $id) ?: get_the_title($id);
     </nav>
 
     <section class="section">
-        <div class="section-heading"><h2><?php echo neblina_i('other_sheets'); ?></h2></div>
+        <div class="section-heading"><h2><?php echo neblina_i('other_books'); ?></h2></div>
         <?php get_template_part('template-parts/book-grid', null, [
             'per_page' => 3,
             'exclude'  => $livro->ID,

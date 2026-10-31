@@ -35,7 +35,7 @@ function neblina_book_author($book_id) {
 }
 
 /**
- * Capa do livro: imagem destacada ou capa provisória tipográfica (protótipo).
+ * Capa do livro: imagem destacada ou, sem imagem, capa tipográfica da marca.
  */
 function neblina_book_cover($book_id, $title, $size = 'neblina-book-cover') {
     $capa = get_the_post_thumbnail_url($book_id, $size);
@@ -48,26 +48,24 @@ function neblina_book_cover($book_id, $title, $size = 'neblina-book-cover') {
         <small><?php echo neblina_i('cover_kicker'); ?></small>
         <strong><?php echo neblina_i('cover_title'); ?></strong>
         <span class="wave brand-symbol"></span>
-        <small><?php echo neblina_i('cover_provisional'); ?></small>
+        <small><?php echo neblina_i('cover_soon'); ?></small>
     </div>
     <?php
 }
 
 /**
- * Retrato provisório de autor (iniciais sobre cor) — authorPlaceholder() do protótipo.
- * Se o autor tiver imagem destacada, mostra a foto no mesmo quadro.
+ * Retrato do autor: imagem destacada ou, sem foto, iniciais sobre cor.
  */
 function neblina_author_portrait($autor, $index) {
     $name = get_the_title($autor);
     $foto = get_the_post_thumbnail_url($autor->ID, 'neblina-author-portrait');
     ?>
     <div class="author-portrait tone-<?php echo (int) $index % 3; ?>" role="img"
-         aria-label="<?php echo esc_attr(($foto ? neblina_i('portrait_of') : neblina_i('portrait_slot')) . ' ' . $name); ?>">
+         aria-label="<?php echo esc_attr(neblina_i('portrait_of') . ' ' . $name); ?>">
         <?php if ($foto): ?>
             <img src="<?php echo esc_url($foto); ?>" alt="">
         <?php else: ?>
             <span class="author-initials" aria-hidden="true"><?php echo esc_html(neblina_initials($name)); ?></span>
-            <span class="portrait-caption" aria-hidden="true"><?php echo neblina_i('portrait_pending'); ?></span>
         <?php endif; ?>
     </div>
     <?php

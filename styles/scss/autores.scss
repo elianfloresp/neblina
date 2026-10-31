@@ -71,14 +71,6 @@
   .text-link { color: var(--hover-ink); }
 }
 
-.authors-note {
-  max-width: 800px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-  margin-top: 44px;
-  font-size: 14px;
-}
-
 @media (max-width: $bp-xl) {
   .authors-grid { gap: 42px 26px; }
 }
@@ -90,7 +82,6 @@
   .author-card h2 { font-size: 25px; }
   .author-card-meta { flex-wrap: wrap; font-size: 12px; }
   .author-card-meta > span:last-child { display: none; }
-  .authors-note { margin-top: 32px; }
 }
 
 @media (max-width: 480px) {

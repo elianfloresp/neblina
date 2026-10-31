@@ -26,6 +26,24 @@ $outros = array_filter($todos, fn($a) => $a->ID !== $autor->ID);
 $genero = neblina_field('genero', $autor->ID);
 $micro  = neblina_field('micro', $autor->ID);
 $bio    = neblina_field('bio', $autor->ID);
+
+// Livros desta voz: ligados em "Autor com página" ou com o mesmo nome em "Nome do autor".
+$livros = get_posts([
+    'post_type'      => 'livro',
+    'posts_per_page' => -1,
+    'orderby'        => ['menu_order' => 'ASC', 'date' => 'ASC'],
+    'meta_query'     => [
+        'relation' => 'OR',
+        ['key' => 'autor_relacionado', 'value' => $autor->ID],
+        ['key' => 'autor_nome',        'value' => get_the_title($autor)],
+    ],
+]);
+$catalogo = get_posts([
+    'post_type'      => 'livro',
+    'posts_per_page' => -1,
+    'orderby'        => ['menu_order' => 'ASC', 'date' => 'ASC'],
+    'fields'         => 'ids',
+]);
 ?>
 
 <div class="shell author-profile">
@@ -43,17 +61,25 @@ $bio    = neblina_field('bio', $autor->ID);
                     <div class="rich-text"><?php echo wp_kses_post($bio); ?></div>
                 </div>
             <?php endif; ?>
-            <span class="demo-label"><?php echo neblina_i('based_on_text'); ?></span>
         </div>
     </section>
 
     <section class="author-books">
         <div class="section-heading">
-            <h2><?php echo neblina_i('editions_heading'); ?></h2>
-            <span class="demo-label"><?php echo neblina_i('titles_pending'); ?></span>
+            <h2><?php echo neblina_i($livros ? 'author_books' : 'editions_heading'); ?></h2>
         </div>
-        <p class="edition-pending"><?php echo neblina_i('editions_pending'); ?></p>
-        <p class="note authors-note"><?php echo neblina_i('authors_note'); ?></p>
+        <?php if ($livros): ?>
+            <div class="books">
+                <?php foreach ($livros as $livro): ?>
+                    <?php get_template_part('template-parts/book-card', null, [
+                        'post'  => $livro,
+                        'index' => array_search($livro->ID, $catalogo, true),
+                    ]); ?>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="edition-pending"><?php echo neblina_i('editions_soon'); ?></p>
+        <?php endif; ?>
     </section>
 
     <?php if ($outros): ?>
