@@ -1,20 +1,19 @@
 // =============================================================
-// home.scss — carrossel + manifesto + home-books + team-preview
+// home.scss — carrossel, livros, manifesto e equipe.
+// Valores do protótipo v14 (identity.css sobrescreve style.css).
 // =============================================================
 @use 'variables' as *;
-@use 'typography' as *;
 
+// --- Carrossel de banners (dentro do .shell) ---
 .banner-carousel {
-  padding: 28px 0 36px;
+  padding-top: 24px;
 
   .banner-empty {
+    display: flex;
+    align-items: center;
+    min-height: 400px;
+    padding: 36px 42px;
     background: var(--soft);
-    padding: 72px 24px;
-    border-radius: 2px;
-
-    .banner-content {
-      max-width: 820px;
-    }
   }
 }
 
@@ -23,7 +22,7 @@
 
 .home-banner.banner-image {
   position: relative;
-  min-height: 490px;
+  min-height: 400px;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -36,142 +35,136 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
+    object-position: center;
   }
 
-  // Véu sobre a foto inteira (protótipo): escuro à esquerda, onde fica o texto.
+  // Véu sobre a foto inteira: escuro à esquerda, onde fica o texto.
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 1;
     background: linear-gradient(90deg, #102b35d9, #102b3550 75%);
   }
 
   .banner-content {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     width: 100%;
-    padding: 44px 48px;
+    padding: 36px 42px;
   }
 
-  .eyebrow { color: inherit; opacity: .85; }
+  .text-link:hover { color: #fff; }
+}
 
-  .banner-title {
-    color: inherit;
-    max-width: 850px;
-  }
+.banner-content .eyebrow {
+  display: block;
+  margin-bottom: 24px;
 }
 
 .banner-title {
-  @include type(display-2);
-  margin: 12px 0 0;
+  font: var(--weight-display) clamp(30px, 3.8vw, 52px)/1.22 var(--font-display);
+  letter-spacing: -.025em;
+  max-width: 1000px;
+  margin: 0;
+  color: inherit;
+  overflow-wrap: break-word;
 }
 
 .banner-pagination {
-  min-height: 64px;
-  padding: 14px 0 18px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-
-  .banner-pages {
-    display: flex;
-    gap: 6px;
-  }
-
-  .banner-page {
-    @include type(ui);
-    background: none;
-    border: 1px solid var(--line);
-    padding: 8px 14px;
-    border-radius: 999px;
-    color: var(--muted);
-
-    &[aria-current='true'] {
-      background: var(--royal);
-      color: #fff;
-      border-color: var(--royal);
-    }
-  }
-
-  .banner-position {
-    @include type(caption);
-    color: var(--muted);
-  }
+  align-items: center;
+  gap: 18px;
+  min-height: 64px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
 }
+.banner-pages { display: flex; gap: 8px; }
+.banner-page {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  transition: background .2s, color .2s;
 
+  &[aria-current='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  &:hover { border-color: var(--ink); }
+}
+.banner-position { font-size: 13px; color: var(--muted); }
+
+// --- Livros na home ---
 .home-books {
-  padding: 20px 0 48px;
+  border-top: 0;
+  padding-top: 30px;
+  padding-bottom: 48px;
+
+  .section-heading { margin-bottom: 22px; }
 }
 
-// Manifesto — bloco azul royal
+// --- Manifesto: bloco azul, coluna única ---
 .manifesto {
   background: var(--royal);
   color: #f9f1ea;
-  padding: 60px 0;
+  padding: 44px 0;
 
-  .shell {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 40px;
-  }
-
-  .eyebrow { color: #d0cde0; }
-
-  // Til grande que aparece na coluna esquerda do manifesto
-  .til {
-    display: block;
-    width: 180px;
-    height: 62px;
-    margin-top: 54px;
-    color: #f9f1ea;
-  }
+  .shell > div:first-child { margin-bottom: 16px; }
 
   h2 {
-    @include type(quote);
+    font: italic 400 clamp(32px, 3.5vw, 48px)/1.15 var(--font-literary);
+    letter-spacing: -1.4px;
     max-width: 950px;
     margin: 0 0 20px;
-    color: #f9f1ea;
   }
 
   p {
     max-width: 68ch;
-    margin: 0 0 20px;
-    color: #e4dfdb;
+    margin: 0 0 16px;
+    font-size: 16px;
+    line-height: 1.65;
   }
 
-  .text-link {
-    color: #f9f1ea;
-    border-bottom-color: #f9f1ea;
-    &:hover { color: #b3c5ff; border-bottom-color: #b3c5ff; }
-  }
+  .text-link:hover { color: #fff; }
 }
 
+// --- Equipe na home ---
 .team-preview {
-  padding: 54px 0;
+  padding: 48px 0;
 
-  .section-heading {
-    margin-bottom: 32px;
-  }
+  .section-heading { margin-bottom: 24px; }
 }
 
+// --- Responsivo ---
 @media (max-width: $bp-md) {
+  .banner-carousel {
+    padding-top: 18px;
+    .banner-empty { min-height: 350px; padding: 28px 22px; }
+  }
   .home-banner.banner-image {
-    min-height: 450px;
+    min-height: 350px;
     &::after { background: linear-gradient(90deg, #102b35e6, #102b3580); }
-    .banner-content {
-      padding: 32px 24px;
-    }
+    .banner-content { padding: 28px 22px; }
   }
-  // Frases do manifesto são longas: no mobile o banner desce um degrau na escala.
-  .banner-title { font-size: var(--size-display-3); }
+  .banner-content .eyebrow { margin-bottom: 18px; }
+  .banner-title {
+    font-size: clamp(25px, 6.4vw, 34px);
+    line-height: 1.26;
+    letter-spacing: -.02em;
+  }
+  .banner-pagination { gap: 6px 10px; padding: 8px 0 12px; }
+  .banner-pages { gap: 4px; max-width: 100%; }
+  .banner-page { min-width: 40px; }
+  .banner-position { font-size: 12px; }
+
+  .home-books { padding: 24px 0 34px; .section-heading { margin-bottom: 20px; } }
+
   .manifesto {
-    padding: 44px 0;
-    .shell { grid-template-columns: 1fr; gap: 16px; }
-    .til { display: none; }
+    padding: 32px 0;
+    h2 { font-size: 32px; margin-bottom: 16px; }
   }
-  .team-preview { padding: 36px 0; }
+
+  .team-preview { padding: 34px 0; }
+}
+
+@media (max-width: 480px) {
+  .banner-content .eyebrow { font-size: 11px; letter-spacing: .08em; }
 }

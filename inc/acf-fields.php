@@ -46,9 +46,11 @@ add_action('acf/init', function () {
 
             // ---------- Aba Comum ----------
             ['key' => 'field_livro_tab_comum', 'label' => 'Comum (nos 2 idiomas)', 'name' => '', 'type' => 'tab', 'placement' => 'top'],
-            ['key' => 'field_livro_autor', 'label' => 'Autor relacionado', 'name' => 'autor_relacionado', 'type' => 'post_object',
+            ['key' => 'field_livro_autor_nome', 'label' => 'Nome do autor', 'name' => 'autor_nome', 'type' => 'text',
+                'instructions' => 'Como aparece no card e na ficha. Usado quando o autor não tem página em Autores.'],
+            ['key' => 'field_livro_autor', 'label' => 'Autor com página', 'name' => 'autor_relacionado', 'type' => 'post_object',
                 'post_type' => ['autor'], 'return_format' => 'object', 'ui' => 1, 'allow_null' => 1,
-                'instructions' => 'Autor cadastrado no admin > Autores.'],
+                'instructions' => 'Opcional. Se o autor estiver cadastrado em Autores, selecione aqui: o nome vira link para o perfil.'],
             ['key' => 'field_livro_meta_isbn',    'label' => 'ISBN',    'name' => 'metadados_isbn',    'type' => 'text',
                 'instructions' => 'Mesmo nos 2 idiomas.'],
             ['key' => 'field_livro_meta_paginas', 'label' => 'Páginas', 'name' => 'metadados_paginas', 'type' => 'number'],

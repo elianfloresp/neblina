@@ -66,8 +66,8 @@ Pronto, site acessível em `http://localhost/neblina/` (redireciona pra `/pt/` o
 neblina/
 ├── style.css                     Metadados do tema (identificação pro WP)
 ├── functions.php                 Setup geral + requires
-├── header.php                    Header global (logo, nav, botão ES/PT, controls)
-├── footer.php                    Footer global (azul royal com til)
+├── header.php                    Aviso do protótipo + header (logo, nav, ES/PT, tema)
+├── footer.php                    Footer azul (frase do manifesto, links, créditos)
 ├── index.php                     Fallback
 ├── 404.php                       Página não encontrada
 │
@@ -82,21 +82,27 @@ neblina/
 ├── single-autor.php              Perfil individual de autor
 │
 ├── inc/                          Lógica modular
-│   ├── i18n.php                  Idioma, campos bilíngues, URLs localizadas, UI strings
+│   ├── i18n.php                  Idioma, campos bilíngues, URLs localizadas, frases de interface
+│   ├── content.php               Texto institucional (13 blocos PT/ES) e equipe
+│   ├── template-helpers.php      Iniciais, autor do livro, capa, retrato provisório
 │   ├── rewrite.php               Rewrite /pt/ e /es/, redirect por Accept-Language, cookie
-│   ├── enqueue.php               CSS/JS + Google Fonts (vai sair quando fontes oficiais chegarem)
+│   ├── enqueue.php               CSS/JS + Google Fonts
 │   ├── cpts.php                  Registra Livro, Autor, Banner
 │   └── acf-fields.php            Campos ACF registrados via PHP (Tabs PT/ES/Comum)
 │
 ├── template-parts/               Partials reutilizáveis
-│   ├── book-card.php             Card de livro (home + catálogo)
-│   └── author-card.php           Card de autor (listagem)
+│   ├── book-grid.php             Grade de livros + paginação (home, catálogo, "Outras fichas")
+│   ├── book-card.php             Card de livro
+│   ├── author-card.php           Card de autor
+│   ├── team-grid.php             Grade da equipe (home sem bio, Equipe com bio)
+│   └── not-found.php             Conteúdo do 404
 │
 ├── styles/scss/                  SOURCE do CSS (editar aqui)
 │   ├── _variables.scss           Paleta oficial + fontes + breakpoints
-│   ├── _typography.scss          Escala tipográfica (papéis + tokens)
-│   ├── global.scss               Reset, header, footer, componentes compartilhados
-│   ├── home.scss                 Carrossel, manifesto, team-preview
+│   ├── _typography.scss          Tokens de fonte e peso
+│   ├── _author-portrait.scss     Retrato provisório de autor (lista e perfil)
+│   ├── global.scss               Base, header, footer, componentes compartilhados
+│   ├── home.scss                 Carrossel, livros, manifesto, equipe
 │   ├── catalogo.scss, livro.scss, autores.scss, autor.scss,
 │   ├── sobre.scss, equipe.scss, contato.scss
 │
@@ -143,40 +149,21 @@ neblina/
 
 ---
 
-## 🔤 Sistema tipográfico
+## 🎨 Fidelidade ao protótipo
 
-Fonte única de verdade: `styles/scss/_typography.scss`. Todo texto usa um **papel** da escala via `@include type(<papel>)`. Não declare `font-size`, `font-weight` ou `letter-spacing` soltos nos componentes.
+O layout segue o protótipo aprovado (entrega v14) à risca: estrutura HTML, textos e valores de CSS foram portados do `style.css` + `identity.css` dele (o segundo sobrescreve o primeiro; vale o valor final). Medido elemento a elemento nas 8 páginas, em 1366px e 375px.
 
-### Escala
+Diferenças intencionais:
 
-| Papel | Fonte | Tamanho (desktop → mobile) | Uso |
-|---|---|---|---|
-| `display-1` | display | 76 → 44px | Título de página |
-| `display-2` | display | 56 → 34px | Título do livro, banner |
-| `display-3` | display | 40 → 27px | Título de seção |
-| `display-4` | display | 24 → 22px | Título de card (livro, autor, pessoa) |
-| `title` | display | 20px | Subtítulo dentro do conteúdo ("Sobre o livro") |
-| `quote` | literária, itálico | 46 → 30px | Manifesto |
-| `lead` | literária, itálico | 28 → 20px | Frase de abertura de página, lead do autor |
-| `excerpt` | literária, itálico | 20 → 18px | Trecho de livro, citação |
-| `body-l` | texto | 20 → 18px | Parágrafo de abertura |
-| `body` | texto | 17 → 16px | Texto corrido |
-| `body-s` | texto | 15px | Descrição de card, texto de apoio |
-| `ui` | texto, 500 | 14px | Navegação, links, botões |
-| `caption` | texto | 13px | Notas, contadores, rodapé |
-| `label` | texto, 600, MAIÚSCULAS | 12 → 11px | Rótulos e eyebrows |
+- **Nenhum texto em peso 700.** Títulos de card e o nome do autor usam 500 (o protótipo usava 700 em alguns lugares; pedido de padronização do Paulo, call de 30/10).
+- **Site 100% bilíngue.** O protótipo mostrava o institucional em português mesmo na versão ES; aqui ele é traduzido.
+- **Sem o editor de banners de demonstração.** No site real, banners são cadastrados no admin.
 
-### Regras
+O aviso "PROTÓTIPO CONCEITUAL" (topo) e a linha "Não é o site definitivo" (rodapé) seguem a entrega v14 e saem quando o cliente aprovar o site definitivo: `header.php` e `footer_credits` em `inc/i18n.php`.
 
-- **Pesos:** títulos sempre no peso display (500); texto 400; interface 500; negrito 600. Nada em 700.
-- **Negrito:** só em rótulos (`label`) e em destaques que o cliente marcar no editor (`<strong>` sai em 600).
-- **Itálico:** só no registro literário: manifesto, frase de abertura, trecho de livro e citação. No texto corrido, itálico serve para título de obra e palavra estrangeira (DM Sans itálico real, carregado). Nunca em interface.
-- **Maiúsculas:** só no papel `label`, sempre com o mesmo espaçamento (.14em).
-- **Exceções gráficas:** iniciais das fotos provisórias, o glifo ◐ do tema e o símbolo do til são elementos gráficos, fora da escala.
+### Fontes
 
-### Trocar a fonte
-
-Mudar `$font-display` / `$font-body` / `$font-literary` em `_variables.scss` e o peso em `--weight-display` (`_typography.scss`), e ajustar os pesos carregados em `inc/enqueue.php`. O resto do site acompanha.
+Manrope (títulos), DM Sans (texto) e Georgia (literária), as mesmas que o protótipo renderiza. Para trocar: `$font-*` em `_variables.scss` e os pesos carregados em `inc/enqueue.php`.
 
 ---
 
@@ -194,7 +181,8 @@ Todos registrados em `inc/cpts.php`. Grupos ACF registrados em `inc/acf-fields.p
 | `metadados_tradutor_pt/es` | text | PT / ES |
 | `metadados_formato_pt/es` | text | PT / ES |
 | `link_compra_pt` / `link_compra_es` | url | PT / ES |
-| `autor_relacionado` | post object → autor | Comum |
+| `autor_nome` | text (nome exibido no card e na ficha) | Comum |
+| `autor_relacionado` | post object → autor (opcional, vira link) | Comum |
 | `metadados_isbn` | text | Comum |
 | `metadados_paginas` | number | Comum |
 | `metadados_ano` | number | Comum |
@@ -257,15 +245,12 @@ Padrão simples inspirado em Conventional Commits:
 
 ## 🚦 Status atual
 
-- ✅ Esqueleto do tema + bilíngue funcional
-- ✅ CPTs e grupos ACF criados
-- ✅ 8 page templates + 2 template-parts
-- ✅ Bilíngue PT/ES com switch funcionando em todas rotas
-- ✅ Símbolo oficial do til no nav/manifesto/footer
-- ✅ Sistema tipográfico com escala e regras documentadas
+- ✅ Layout fiel ao protótipo v14 em todas as páginas, desktop e mobile
+- ✅ Bilíngue PT/ES com troca de idioma em todas as rotas
+- ✅ CPTs e grupos ACF; conteúdo do protótipo cadastrado (3 livros, 7 autores, 6 banners)
+- ✅ Favicon a partir do símbolo do til
 - 🔴 Fontes oficiais bloqueadas: a Mundial Narrow comprada tem licença **desktop** (proíbe `@font-face`) e a Atlantix SSi veio de agregador sem licença. Falta licença webfont.
 - 🟡 Checkout WooCommerce (EUR only) em configuração
-- 🟡 Favicon a trocar pelo símbolo oficial
 - 🔴 Deploy pendente de contratação de hospedagem pelo cliente
 
 **Prazo:** 12-13/11/2026.

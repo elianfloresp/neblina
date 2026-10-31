@@ -52,20 +52,11 @@ function neblina_theme_support() {
 add_action('after_setup_theme', 'neblina_theme_support');
 
 /**
- * Iniciais para retratos provisórios: primeira letra do nome + do sobrenome.
- * "Eduardo Viveiros de Castro" → "EC".
- */
-function neblina_initials($name) {
-    $words = preg_split('/\s+/u', trim($name));
-    $first = mb_substr($words[0], 0, 1);
-    $last  = count($words) > 1 ? mb_substr(end($words), 0, 1) : '';
-    return mb_strtoupper($first . $last);
-}
-
-/**
  * Required files — ordem importa (i18n antes de rewrite/templates)
  */
 require NEBLINA_DIR . '/inc/i18n.php';
+require NEBLINA_DIR . '/inc/content.php';
+require NEBLINA_DIR . '/inc/template-helpers.php';
 require NEBLINA_DIR . '/inc/rewrite.php';
 require NEBLINA_DIR . '/inc/enqueue.php';
 require NEBLINA_DIR . '/inc/cpts.php';

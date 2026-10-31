@@ -1,86 +1,15 @@
 // =============================================================
-// Sistema tipográfico da Neblina — fonte única de verdade.
-//
-// Todo texto do site usa um PAPEL desta escala via @include type(<papel>).
-// Não declare font-size/font-weight/letter-spacing soltos nos componentes.
-// Regras de uso (negrito, itálico, maiúsculas) estão no README.
+// Tokens tipográficos. Tamanhos e espaçamentos seguem o protótipo
+// aprovado (v14), componente a componente, nos .scss de cada página.
+// Regra mantida sobre o protótipo: nenhum texto em peso 700.
+// Trocar fonte = mudar $font-* em _variables.scss.
 // =============================================================
-@use 'sass:map';
 @use 'variables' as *;
 
-// Tokens emitidos em :root pelo global.scss. Trocar fonte ou peso = mudar aqui.
 @mixin type-tokens {
   --font-display:  #{$font-display};
   --font-body:     #{$font-body};
   --font-literary: #{$font-literary};
-
   --weight-display: 500;
-  --weight-body:    400;
-  --weight-ui:      500;
   --weight-strong:  600;
-
-  --size-display-1: clamp(44px, 5.6vw, 76px);
-  --size-display-2: clamp(34px, 4vw, 56px);
-  --size-display-3: clamp(27px, 2.8vw, 40px);
-  --size-display-4: 24px;
-  --size-title:     20px;
-  --size-quote:     clamp(30px, 3.4vw, 46px);
-  --size-lead:      clamp(20px, 2.1vw, 28px);
-  --size-body-l:    20px;
-  --size-body:      17px;
-  --size-body-s:    15px;
-  --size-ui:        14px;
-  --size-caption:   13px;
-  --size-label:     12px;
-}
-
-@mixin type-tokens-mobile {
-  --size-display-4: 22px;
-  --size-body-l:    18px;
-  --size-body:      16px;
-  --size-label:     11px;
-}
-
-$type-scale: (
-  // Títulos (fonte display, peso único)
-  'display-1': (family: display, size: display-1, line: 1.06, track: -.05em),  // título de página
-  'display-2': (family: display, size: display-2, line: 1.1,  track: -.04em),  // título de livro, banner
-  'display-3': (family: display, size: display-3, line: 1.15, track: -.03em),  // título de seção
-  'display-4': (family: display, size: display-4, line: 1.2,  track: -.02em),  // título de card
-  'title':     (family: display, size: title,     line: 1.35, track: -.01em),  // subtítulo dentro de conteúdo
-
-  // Literário (serifa, sempre itálico)
-  'quote':     (family: literary, size: quote,  line: 1.22, track: -.01em, style: italic),  // manifesto
-  'lead':      (family: literary, size: lead,   line: 1.45, track: 0,      style: italic),  // frase de abertura
-  'excerpt':   (family: literary, size: body-l, line: 1.6,  track: 0,      style: italic),  // trecho de livro
-
-  // Texto
-  'body-l':    (family: body, size: body-l, line: 1.65, track: 0),  // parágrafo de abertura
-  'body':      (family: body, size: body,   line: 1.65, track: 0),  // texto corrido
-  'body-s':    (family: body, size: body-s, line: 1.6,  track: 0),  // descrição de card, apoio
-
-  // Interface
-  'ui':        (family: body, size: ui,      line: 1.4, track: 0,     weight: ui),                         // nav, links, botões
-  'caption':   (family: body, size: caption, line: 1.5, track: 0),                                         // notas, contadores
-  'label':     (family: body, size: label,   line: 1.4, track: .14em, weight: strong, case: uppercase),    // eyebrows, rótulos
-);
-
-@mixin type($role) {
-  $r: map.get($type-scale, $role);
-  @if not $r {
-    @error "Papel tipográfico desconhecido: #{$role}";
-  }
-  $family: map.get($r, family);
-  $weight: map.get($r, weight);
-  @if not $weight {
-    @if $family == display { $weight: display; } @else { $weight: body; }
-  }
-
-  font-family: var(--font-#{$family});
-  font-size: var(--size-#{map.get($r, size)});
-  font-weight: var(--weight-#{$weight});
-  font-style: map.get($r, style) or normal;
-  line-height: map.get($r, line);
-  letter-spacing: map.get($r, track);
-  text-transform: map.get($r, case) or none;
 }
