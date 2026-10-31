@@ -94,6 +94,7 @@ neblina/
 │
 ├── styles/scss/                  SOURCE do CSS (editar aqui)
 │   ├── _variables.scss           Paleta oficial + fontes + breakpoints
+│   ├── _typography.scss          Escala tipográfica (papéis + tokens)
 │   ├── global.scss               Reset, header, footer, componentes compartilhados
 │   ├── home.scss                 Carrossel, manifesto, team-preview
 │   ├── catalogo.scss, livro.scss, autores.scss, autor.scss,
@@ -139,6 +140,43 @@ neblina/
 - `neblina_i('see_catalog')` → traduz string de UI do array em `inc/i18n.php`
 
 **Pra adicionar/trocar frase de UI:** edita `inc/i18n.php` → array `$strings`.
+
+---
+
+## 🔤 Sistema tipográfico
+
+Fonte única de verdade: `styles/scss/_typography.scss`. Todo texto usa um **papel** da escala via `@include type(<papel>)`. Não declare `font-size`, `font-weight` ou `letter-spacing` soltos nos componentes.
+
+### Escala
+
+| Papel | Fonte | Tamanho (desktop → mobile) | Uso |
+|---|---|---|---|
+| `display-1` | display | 76 → 44px | Título de página |
+| `display-2` | display | 56 → 34px | Título do livro, banner |
+| `display-3` | display | 40 → 27px | Título de seção |
+| `display-4` | display | 24 → 22px | Título de card (livro, autor, pessoa) |
+| `title` | display | 20px | Subtítulo dentro do conteúdo ("Sobre o livro") |
+| `quote` | literária, itálico | 46 → 30px | Manifesto |
+| `lead` | literária, itálico | 28 → 20px | Frase de abertura de página, lead do autor |
+| `excerpt` | literária, itálico | 20 → 18px | Trecho de livro, citação |
+| `body-l` | texto | 20 → 18px | Parágrafo de abertura |
+| `body` | texto | 17 → 16px | Texto corrido |
+| `body-s` | texto | 15px | Descrição de card, texto de apoio |
+| `ui` | texto, 500 | 14px | Navegação, links, botões |
+| `caption` | texto | 13px | Notas, contadores, rodapé |
+| `label` | texto, 600, MAIÚSCULAS | 12 → 11px | Rótulos e eyebrows |
+
+### Regras
+
+- **Pesos:** títulos sempre no peso display (500); texto 400; interface 500; negrito 600. Nada em 700.
+- **Negrito:** só em rótulos (`label`) e em destaques que o cliente marcar no editor (`<strong>` sai em 600).
+- **Itálico:** só no registro literário: manifesto, frase de abertura, trecho de livro e citação. No texto corrido, itálico serve para título de obra e palavra estrangeira (DM Sans itálico real, carregado). Nunca em interface.
+- **Maiúsculas:** só no papel `label`, sempre com o mesmo espaçamento (.14em).
+- **Exceções gráficas:** iniciais das fotos provisórias, o glifo ◐ do tema e o símbolo do til são elementos gráficos, fora da escala.
+
+### Trocar a fonte
+
+Mudar `$font-display` / `$font-body` / `$font-literary` em `_variables.scss` e o peso em `--weight-display` (`_typography.scss`), e ajustar os pesos carregados em `inc/enqueue.php`. O resto do site acompanha.
 
 ---
 
@@ -224,7 +262,8 @@ Padrão simples inspirado em Conventional Commits:
 - ✅ 8 page templates + 2 template-parts
 - ✅ Bilíngue PT/ES com switch funcionando em todas rotas
 - ✅ Símbolo oficial do til no nav/manifesto/footer
-- 🟡 Fontes oficiais (Mundial Narrow + Atlantix) a instalar
+- ✅ Sistema tipográfico com escala e regras documentadas
+- 🔴 Fontes oficiais bloqueadas: a Mundial Narrow comprada tem licença **desktop** (proíbe `@font-face`) e a Atlantix SSi veio de agregador sem licença. Falta licença webfont.
 - 🟡 Checkout WooCommerce (EUR only) em configuração
 - 🟡 Favicon a trocar pelo símbolo oficial
 - 🔴 Deploy pendente de contratação de hospedagem pelo cliente

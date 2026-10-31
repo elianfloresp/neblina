@@ -1,8 +1,9 @@
 // =============================================================
-// global.scss — reset, variáveis CSS, header, footer, componentes
+// global.scss — reset, tokens, header, footer, componentes
 // Carregado em TODAS as páginas
 // =============================================================
 @use 'variables' as *;
+@use 'typography' as *;
 @use 'sass:color';
 
 // --- CSS CUSTOM PROPERTIES ---
@@ -19,9 +20,11 @@
   --green:  #{$green};
   --hover-ink: #{$royal};
 
-  --display:  #{$font-display};
-  --body:     #{$font-body};
-  --literary: #{$font-literary};
+  @include type-tokens;
+}
+
+@media (max-width: $bp-md) {
+  :root { @include type-tokens-mobile; }
 }
 
 :root[data-theme='dark'] {
@@ -41,9 +44,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--text);
-  font-family: var(--body);
-  font-size: 17px;
-  line-height: 1.6;
+  @include type(body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -55,26 +56,42 @@ a {
   &:hover, &:focus-visible { color: var(--hover-ink); }
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--display);
+// Zera o negrito padrão do navegador: títulos usam sempre o peso display.
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
   color: var(--ink);
-  letter-spacing: -.025em;
-  line-height: 1.15;
   margin: 0;
+  overflow-wrap: break-word;  // título grande com palavra longa não estoura o mobile
 }
+
+strong, b { font-weight: var(--weight-strong); }
 
 img { max-width: 100%; height: auto; display: block; }
 
 ul, ol, dl, dt, dd { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+button { cursor: pointer; }
+
+// Conteúdo vindo do editor do admin (sinopse, bio, trecho).
+.rich-text {
+  p { margin: 0 0 1em; }
+  p:last-child { margin-bottom: 0; }
+  em, i { font-style: italic; }
+  blockquote {
+    margin: 1.2em 0;
+    padding-left: 1em;
+    border-left: 2px solid var(--line);
+    @include type(excerpt);
+  }
 }
 
 // --- CONTAINER ---
-// Original: width: min(1320px, calc(100% - 96px))
 .shell {
   width: min(1320px, calc(100% - 96px));
   margin: 0 auto;
@@ -96,11 +113,11 @@ button {
   color: #fff;
   padding: 12px 20px;
   z-index: 100;
+  @include type(ui);
   &:focus { left: 0; }
 }
 
 // --- HEADER ---
-// Original: display:flex, gap:38px, min-height:112px, nav tem margin-left:auto
 .header {
   display: flex;
   align-items: center;
@@ -140,15 +157,14 @@ button {
 
       a {
         position: relative;
-        font-size: 14px;
-        font-weight: 500;
+        @include type(ui);
         color: var(--text);
         padding: 10px 0;
         transition: color .22s;
 
         &:hover, &:focus-visible { color: var(--royal); }
 
-        // Símbolo oficial do til (symbol.png) como indicador do item ativo
+        // Símbolo oficial do til como indicador do item ativo
         &[aria-current='page'] {
           color: var(--ink);
         }
@@ -173,11 +189,9 @@ button {
     gap: 12px;
 
     .lang {
-      font-size: 14px;
-      font-weight: 600;
+      @include type(ui);
       padding: 6px 2px;
       opacity: .6;
-      letter-spacing: .05em;
 
       &.is-active, &[aria-current='true'] {
         opacity: 1;
@@ -186,6 +200,7 @@ button {
       }
     }
 
+    // Ícone ◐ — tamanho do glifo, fora da escala tipográfica
     .theme-toggle {
       background: none;
       border: 1px solid var(--line);
@@ -195,6 +210,7 @@ button {
       padding: 0;
       color: var(--ink);
       font-size: 20px;
+      line-height: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -232,7 +248,12 @@ button {
     .brand { width: 180px; margin-bottom: 16px; display: inline-block; }
     .brand img { width: 100%; }
     .brand-dark { display: none; }
-    p { max-width: 42ch; margin: 0 0 20px; color: #e4dfdb; }
+    p {
+      @include type(body-s);
+      max-width: 42ch;
+      margin: 0 0 20px;
+      color: #e4dfdb;
+    }
 
     .footer-til {
       width: 90px;
@@ -248,7 +269,7 @@ button {
     gap: 10px;
     align-items: flex-end;
 
-    a { font-size: 15px; }
+    a { @include type(ui); }
   }
 
   .footer-bottom {
@@ -258,7 +279,7 @@ button {
     padding-top: 20px;
     border-top: 1px solid #8995b7;
     color: #e4dfdb;
-    font-size: 14px;
+    @include type(caption);
   }
 }
 
@@ -267,8 +288,7 @@ button {
 // =============================================================
 
 // --- Símbolo oficial do til (reutilizável) ---
-// Uso: <span class="brand-symbol"></span>
-// Herda a cor do contexto via currentColor + mask.
+// Uso: <span class="til"></span>. Herda a cor via currentColor + mask.
 .brand-symbol,
 .til {
   display: inline-block;
@@ -283,32 +303,28 @@ button {
 }
 
 .eyebrow {
-  font-size: 12px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
+  @include type(label);
   color: var(--muted);
-  font-weight: 700;
   display: inline-block;
 }
 
 .text-link {
+  @include type(ui);
   color: var(--ink);
   border-bottom: 1px solid currentColor;
   padding-bottom: 2px;
-  font-weight: 500;
   display: inline-block;
 
   &:hover { color: var(--royal); }
 }
 
 .button {
+  @include type(ui);
   display: inline-block;
   background: var(--royal);
   color: #fff !important;
   padding: 12px 26px;
   border-radius: 999px;
-  font-weight: 600;
-  font-size: 15px;
   border: none;
   margin: 14px 0;
   text-align: center;
@@ -326,32 +342,28 @@ button {
 }
 
 .note {
-  font-size: 14px;
+  @include type(caption);
   color: var(--muted);
-  font-style: italic;
   max-width: 60ch;
   margin: 20px 0;
 }
 
-// Original: page-intro padding 55/36, h1 clamp(45px, 6vw, 80px)
 .page-intro {
   padding: 55px 0 36px;
 
   .eyebrow { margin-bottom: 12px; color: var(--royal); }
 
   h1 {
-    font-size: clamp(45px, 6vw, 80px);
-    font-weight: 500;
-    letter-spacing: -.055em;
-    line-height: 1.1;
+    @include type(display-1);
     margin: 18px 0 24px;
     color: var(--ink);
   }
 
+  // Subtítulo da página: frase de abertura literária
   p {
-    font-size: 17px;
+    @include type(lead);
     color: var(--muted);
-    max-width: 700px;
+    max-width: 650px;
     margin: 0;
   }
 }
@@ -365,7 +377,7 @@ button {
   flex-wrap: wrap;
 
   h2 {
-    font-size: clamp(26px, 3.2vw, 44px);
+    @include type(display-3);
     max-width: 24ch;
     margin: 0;
   }
@@ -399,22 +411,20 @@ button {
       box-shadow: 6px 9px 20px #02020124;
     }
 
+    // Capa provisória (quando o livro não tem imagem)
     .cover {
       padding: 24px;
       text-align: center;
       color: var(--brick);
-      font-family: var(--literary);
 
       small {
+        @include type(label);
         display: block;
-        font-size: 10px;
-        letter-spacing: .15em;
         margin-bottom: 20px;
       }
       strong {
+        @include type(display-4);
         display: block;
-        font-size: 22px;
-        line-height: 1.2;
       }
     }
 
@@ -429,26 +439,26 @@ button {
   &:nth-child(3) .book-stage { background: $brick; .cover { color: #fff; } }
 
   .meta {
+    @include type(label);
     display: flex;
     justify-content: space-between;
-    font-size: 11px;
-    letter-spacing: .14em;
     color: var(--muted);
-    text-transform: uppercase;
     padding-top: 8px;
     border-top: 1px solid var(--line);
-    font-weight: 600;
   }
 
   h3 {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 2px 0 2px;
+    @include type(display-4);
+    margin: 2px 0;
 
     a { color: var(--ink); }
   }
 
-  p { font-size: 15px; color: var(--muted); margin: 0; }
+  p {
+    @include type(body-s);
+    color: var(--muted);
+    margin: 0;
+  }
 }
 
 .pagination {
@@ -458,11 +468,10 @@ button {
   margin: 40px 0;
 
   .page-link {
+    @include type(ui);
     padding: 8px 14px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    font-size: 14px;
-    font-weight: 600;
 
     &[aria-current='page'] {
       background: var(--royal);
@@ -493,11 +502,13 @@ button {
       overflow: hidden;
     }
 
+    // Iniciais provisórias — elemento gráfico, fora da escala tipográfica
     .photo-placeholder {
-      font-family: var(--literary);
+      font-family: var(--font-literary);
+      font-weight: var(--weight-body);
       font-size: 72px;
+      line-height: 1;
       color: var(--brick);
-      font-weight: 300;
     }
 
     &:nth-child(1) .portrait { background: $soft; }
@@ -505,29 +516,24 @@ button {
     &:nth-child(3) .portrait { background: $green; .photo-placeholder { color: #f9f1ea; } }
 
     h3 {
-      font-size: 24px;
-      font-weight: 700;
+      @include type(display-4);
       margin: 0;
     }
 
     .role {
-      font-size: 12px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+      @include type(label);
       color: var(--muted);
       margin: 0;
     }
 
     p {
-      font-size: 15px;
+      @include type(body-s);
       color: var(--text);
       margin: 4px 0 0;
-      line-height: 1.6;
     }
   }
 }
 
-// Original: section com border-top, padding 44px/72px
 .section {
   padding: 44px 0 72px;
   border-top: 1px solid var(--line);
@@ -535,8 +541,6 @@ button {
 
 // --- MOBILE ---
 @media (max-width: $bp-md) {
-  body { font-size: 16px; }
-
   .header {
     min-height: 90px;
     flex-wrap: wrap;
@@ -574,10 +578,10 @@ button {
       padding: 6px 0;
 
       .mobile-home, .menu-toggle {
+        @include type(ui);
         display: inline-flex;
         align-items: center;
         min-height: 44px;
-        font-size: 14px;
         padding: 8px 12px;
       }
       .mobile-home { padding-left: 0; color: var(--ink); }
@@ -599,8 +603,8 @@ button {
   .team-grid { grid-template-columns: 1fr; gap: 32px; }
   .team-grid .person .portrait { max-width: 220px; }
 
-  .page-intro { padding: 35px 0 28px; h1 { font-size: 48px; } }
-  .section-heading { h2 { font-size: 27px; max-width: none; } }
+  .page-intro { padding: 35px 0 28px; }
+  .section-heading h2 { max-width: none; }
   .section { padding: 30px 0 45px; }
 }
 
