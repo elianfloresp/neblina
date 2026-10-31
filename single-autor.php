@@ -36,7 +36,7 @@ $outros = get_posts([
                 <img src="<?php echo esc_url($retrato); ?>" alt="<?php echo esc_attr(get_the_title($autor)); ?>">
             <?php else: ?>
                 <span class="author-initials" aria-hidden="true">
-                    <?php echo esc_html(mb_strtoupper(mb_substr(get_the_title($autor), 0, 2))); ?>
+                    <?php echo esc_html(neblina_initials(get_the_title($autor))); ?>
                 </span>
             <?php endif; ?>
         </div>

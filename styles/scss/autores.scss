@@ -62,6 +62,8 @@
     color: var(--muted);
     margin: 0 0 10px;
   }
+
+  .text-link { align-self: flex-start; }
 }
 
 @media (max-width: $bp-md) {

@@ -12,7 +12,7 @@ $micro  = neblina_field('micro',  $post->ID);
 $retrato = get_the_post_thumbnail_url($post->ID, 'neblina-author-portrait');
 $url    = neblina_url('autor', $post->post_name);
 $name   = get_the_title($post);
-$initials = mb_strtoupper(mb_substr($name, 0, 2));
+$initials = neblina_initials($name);
 ?>
 <article class="author-card">
     <a class="author-card-link" href="<?php echo esc_url($url); ?>">
