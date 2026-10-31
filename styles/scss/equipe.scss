@@ -5,9 +5,6 @@
 @use 'variables' as *;
 
 .team-grid.team-grid-full {
-  .person .portrait {
-    aspect-ratio: 3/4;
-  }
   .person p {
     max-width: 42ch;
   }

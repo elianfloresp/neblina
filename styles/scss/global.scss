@@ -459,6 +459,9 @@ button { cursor: pointer; }
     color: var(--muted);
     margin: 0;
   }
+
+  // O card é flex em coluna: sem isto o link estica e o sublinhado cruza o card.
+  .text-link { align-self: flex-start; }
 }
 
 .pagination {
@@ -494,12 +497,14 @@ button { cursor: pointer; }
     gap: 14px;
 
     .portrait {
-      aspect-ratio: 1;
+      aspect-ratio: 3/4;
       background: var(--soft);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+
+      img { width: 100%; height: 100%; object-fit: cover; }
     }
 
     // Iniciais provisórias — elemento gráfico, fora da escala tipográfica

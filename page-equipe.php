@@ -36,11 +36,7 @@ $equipe = [
         <div class="team-grid team-grid-full">
             <?php foreach ($equipe as $pessoa): ?>
                 <article class="person">
-                    <div class="portrait <?php echo esc_attr($pessoa['id']); ?>">
-                        <div class="photo-placeholder" aria-hidden="true">
-                            <?php echo esc_html(mb_strtoupper(mb_substr($pessoa['name'], 0, 2))); ?>
-                        </div>
-                    </div>
+                    <?php get_template_part('template-parts/team-portrait', null, ['pessoa' => $pessoa]); ?>
                     <h3><?php echo esc_html($pessoa['name']); ?></h3>
                     <p class="role"><?php echo neblina_i('editorial_team'); ?></p>
                     <p><?php echo esc_html($pessoa['bio_' . neblina_lang()] ?? $pessoa['bio_es']); ?></p>

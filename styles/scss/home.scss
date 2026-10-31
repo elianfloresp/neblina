@@ -18,12 +18,17 @@
   }
 }
 
+// O display:flex anula o atributo hidden: sem isto todos os slides aparecem empilhados.
+.home-banner[hidden] { display: none !important; }
+
 .home-banner.banner-image {
   position: relative;
-  min-height: 440px;
+  min-height: 490px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   overflow: hidden;
+  background: #102b35;
+  color: #f9f1ea;
 
   .banner-photo {
     position: absolute;
@@ -34,17 +39,28 @@
     z-index: 0;
   }
 
+  // Véu sobre a foto inteira (protótipo): escuro à esquerda, onde fica o texto.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(90deg, #102b35d9, #102b3550 75%);
+  }
+
   .banner-content {
     position: relative;
     z-index: 2;
-    padding: 36px 42px;
-    max-width: 1000px;
-    background: linear-gradient(0deg, rgba(2,2,1,.6), transparent);
-    color: #f9f1ea;
     width: 100%;
+    padding: 44px 48px;
   }
 
-  .banner-title { color: inherit; }
+  .eyebrow { color: inherit; opacity: .85; }
+
+  .banner-title {
+    color: inherit;
+    max-width: 850px;
+  }
 }
 
 .banner-title {
@@ -144,9 +160,10 @@
 
 @media (max-width: $bp-md) {
   .home-banner.banner-image {
-    min-height: 340px;
+    min-height: 450px;
+    &::after { background: linear-gradient(90deg, #102b35e6, #102b3580); }
     .banner-content {
-      padding: 24px 20px;
+      padding: 32px 24px;
     }
   }
   // Frases do manifesto são longas: no mobile o banner desce um degrau na escala.
