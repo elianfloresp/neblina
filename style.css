@@ -1,0 +1,20 @@
+/*
+Theme Name: Neblina Editorial
+Theme URI: https://editorialneblina.com
+Author: Elian Flores & Luisa
+Author URI: https://editorialneblina.com
+Description: Tema customizado para a Editora Neblina — literatura brasileira na Espanha. Bilíngue PT/ES sem plugin de tradução. Compilado via Gulp.
+Version: 1.0.0
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: neblina
+Requires at least: 6.0
+Requires PHP: 8.0
+Tags: editorial, bilingual, custom
+*/
+
+/*
+ * Este arquivo serve apenas para o WordPress identificar o tema.
+ * Todo o CSS real fica em assets/css/*.css (compilado via Gulp de styles/scss/).
+ * Para rodar o build: cd no tema → npm install → npm run watch (ou gulp).
+ */

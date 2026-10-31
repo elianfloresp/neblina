@@ -1,0 +1,15 @@
+// =============================================================
+// equipe.scss — página equipe (3 pessoas)
+// =============================================================
+@use 'variables' as *;
+
+// Herda do global.scss .team-grid, só adiciona o full width
+.team-grid.team-grid-full {
+  .person .portrait {
+    aspect-ratio: 3/4;
+  }
+  .person p {
+    font-size: 15px;
+    max-width: 42ch;
+  }
+}

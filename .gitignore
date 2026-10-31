@@ -1,0 +1,28 @@
+# Dependências
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# WP temp/cache
+wp-cli.yml
+.wp-cli.yml
+
+# ACF cache local (se criado por plugins)
+acf-json/
+
+# Local overrides
+*.local
+.env
+.env.local

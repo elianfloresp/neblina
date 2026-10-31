@@ -1,0 +1,71 @@
+// =============================================================
+// sobre.scss — página institucional
+// =============================================================
+@use 'variables' as *;
+
+.institutional-page {
+  padding-bottom: 60px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 48px;
+  padding: 20px 0 50px;
+  align-items: start;
+}
+
+.about-symbol {
+  background: var(--green);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper);  // o símbolo herda via currentColor
+
+  .til {
+    display: block;
+    width: 72%;
+    height: 140px;
+  }
+}
+
+.about-copy p {
+  font-size: 18px;
+  max-width: 60ch;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.identity-story {
+  padding: 36px 0;
+  border-top: 1px solid var(--line);
+
+  h2 {
+    font-size: clamp(26px, 3vw, 40px);
+    margin: 0 0 20px;
+    font-weight: 500;
+    letter-spacing: -.025em;
+    max-width: 25ch;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0 0 18px;
+    max-width: 76ch;
+
+    &:last-child { margin-bottom: 0; }
+  }
+}
+
+@media (max-width: 760px) {
+  .about-grid { grid-template-columns: 1fr; gap: 24px; }
+  .about-symbol .til { height: 90px; }
+  .identity-story {
+    padding: 28px 0;
+    h2 { font-size: 28px; }
+    p { font-size: 16px; }
+  }
+}

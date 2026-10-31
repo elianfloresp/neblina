@@ -1,0 +1,51 @@
+// =============================================================
+// contato.scss — página de contato
+// =============================================================
+@use 'variables' as *;
+
+.contact-layout.contact-channels {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 40px;
+  padding: 20px 0 60px;
+
+  .contact-item {
+    min-width: 0;
+
+    h2 {
+      margin: 18px 0 10px;
+      font-size: 22px;
+
+      .text-link {
+        font-size: 18px;
+        overflow-wrap: anywhere;
+      }
+    }
+
+    p {
+      font-size: 16px;
+      max-width: 30ch;
+      color: var(--muted);
+    }
+
+    .button { margin-top: 10px; }
+  }
+}
+
+@media (max-width: 1000px) {
+  .contact-layout.contact-channels {
+    grid-template-columns: 1fr 1fr;
+    .contact-item:first-child {
+      grid-column: 1 / -1;
+      p { max-width: none; }
+    }
+  }
+}
+
+@media (max-width: 760px) {
+  .contact-layout.contact-channels {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    .contact-item:first-child { grid-column: auto; }
+  }
+}

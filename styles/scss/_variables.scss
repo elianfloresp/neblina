@@ -1,0 +1,34 @@
+// =============================================================
+// Variáveis globais da Neblina — importar em todo .scss de página
+// Paleta oficial (prancha 4 do Key Visual) + fontes de fallback
+// =============================================================
+
+// --- CORES: light mode (padrão) ---
+$paper:  #f9f1ea;  // fundo principal (creme)
+$ink:    #020201;  // preto
+$text:   #222221;  // preto suave
+$muted:  #645b55;  // texto secundário
+$line:   #cec2b8;  // separadores
+$soft:   #eee2d6;  // bege suave
+
+// --- CORES: paleta de apoio ---
+$orange: #ed9c2e;  // ocre
+$royal:  #324483;  // azul royal (destaque principal)
+$brick:  #923e34;  // terracota
+$green:  #4a8e4d;  // verde
+$brown:  #222221;
+
+// --- FONTES ---
+$font-display:  'Manrope', Arial, sans-serif;         // títulos, display
+$font-body:     'DM Sans', Arial, sans-serif;         // corpo
+$font-literary: Georgia, 'Times New Roman', serif;    // itálicos literários, citações
+
+// --- BREAKPOINTS ---
+$bp-sm: 360px;
+$bp-md: 760px;
+$bp-lg: 1000px;
+$bp-xl: 1100px;
+
+// --- CONTAINER ---
+$shell-max: 1200px;
+$shell-pad: 16px;
