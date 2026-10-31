@@ -72,16 +72,6 @@ img { max-width: 100%; height: auto; }
   margin: auto;
 }
 
-// --- Aviso do protótipo ---
-.notice {
-  background: var(--royal);
-  color: #f9f1ea;
-  font-size: 12px;
-  text-align: center;
-  padding: 6px 20px;
-  letter-spacing: .08em;
-}
-
 // --- Cabeçalho (o próprio <header> é o container) ---
 .header {
   display: flex;
@@ -476,8 +466,6 @@ a.page-link:hover { border-color: var(--ink); color: var(--ink); }
 
 @media (max-width: $bp-md) {
   .shell { width: calc(100% - 36px); }
-  .notice { font-size: 10px; }
-
   .header {
     min-height: 90px;
     flex-wrap: wrap;

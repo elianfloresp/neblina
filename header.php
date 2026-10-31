@@ -22,9 +22,6 @@ $is_home = get_query_var('neblina_route', 'home') === 'home';
 
 <a class="skip" href="#main"><?php echo neblina_i('skip_to_content'); ?></a>
 
-<?php // Aviso do protótipo: sai quando o cliente aprovar o site definitivo (LEIA-ME da entrega v14). ?>
-<div class="notice"><?php echo neblina_i('prototype_notice'); ?></div>
-
 <header class="header shell">
     <a class="brand" href="<?php echo esc_url(neblina_home_url()); ?>" aria-label="Neblina Editorial — <?php echo esc_attr(neblina_i('home_lower')); ?>">
         <img class="brand-dark" src="<?php echo esc_url(NEBLINA_URI . '/assets/images/brand/logo-dark.png'); ?>" alt="Neblina Editorial">

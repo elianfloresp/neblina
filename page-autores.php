@@ -28,7 +28,6 @@ $autores = get_posts([
                 <?php get_template_part('template-parts/author-card', null, ['post' => $autor, 'index' => $i]); ?>
             <?php endforeach; ?>
         </div>
-        <p class="note authors-note"><?php echo neblina_i('authors_note'); ?></p>
     </section>
 </div>
 

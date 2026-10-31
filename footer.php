@@ -21,7 +21,7 @@
         </div>
         <div class="footer-bottom">
             <span>Neblina Editorial · Brasil / España</span>
-            <span><?php echo neblina_i('footer_credits'); ?></span>
+            <span>© <?php echo esc_html(date('Y')); ?> · <?php echo neblina_i('footer_rights'); ?></span>
         </div>
     </div>
 </footer>

@@ -13,7 +13,6 @@ get_header();
     </div>
     <section class="section">
         <?php get_template_part('template-parts/book-grid', null, ['per_page' => 6, 'base' => neblina_url('livros')]); ?>
-        <p class="note"><?php echo neblina_i('catalog_note'); ?></p>
     </section>
 </div>
 

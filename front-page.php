@@ -67,7 +67,6 @@ $inst = neblina_institutional();
             <a class="text-link" href="<?php echo esc_url(neblina_url('livros')); ?>"><?php echo neblina_i('see_catalog'); ?></a>
         </div>
         <?php get_template_part('template-parts/book-grid', null, ['per_page' => 3, 'base' => neblina_home_url()]); ?>
-        <p class="note"><?php echo neblina_i('catalog_note'); ?></p>
     </section>
 </div>
 
