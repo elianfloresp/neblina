@@ -2,6 +2,7 @@
 // contato.scss — página de contato
 // =============================================================
 @use 'variables' as *;
+@use 'typography' as *;
 
 .contact-layout.contact-channels {
   display: grid;
@@ -13,17 +14,19 @@
     min-width: 0;
 
     h2 {
+      @include type(title);
       margin: 18px 0 10px;
-      font-size: 22px;
 
+      // O link é o próprio título do canal: herda o papel "title"
       .text-link {
-        font-size: 18px;
+        font: inherit;
+        letter-spacing: inherit;
         overflow-wrap: anywhere;
       }
     }
 
     p {
-      font-size: 16px;
+      @include type(body-s);
       max-width: 30ch;
       color: var(--muted);
     }
@@ -32,7 +35,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: $bp-lg) {
   .contact-layout.contact-channels {
     grid-template-columns: 1fr 1fr;
     .contact-item:first-child {
@@ -42,7 +45,7 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: $bp-md) {
   .contact-layout.contact-channels {
     grid-template-columns: 1fr;
     gap: 24px;

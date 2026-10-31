@@ -48,7 +48,7 @@ $outros = get_posts([
             <?php if ($bio): ?>
                 <div class="author-bio">
                     <h2><?php echo neblina_i('about_writing'); ?></h2>
-                    <div><?php echo wp_kses_post($bio); ?></div>
+                    <div class="rich-text"><?php echo wp_kses_post($bio); ?></div>
                 </div>
             <?php endif; ?>
         </div>

@@ -1,17 +1,14 @@
 // =============================================================
 // livro.scss — ficha individual de livro
-// Baseado no style.css original do protótipo v14 (.book-detail)
 // =============================================================
 @use 'variables' as *;
+@use 'typography' as *;
 
 .book-detail-wrapper {
   .book-back {
     padding: 24px 0 0;
 
-    .text-link {
-      font-size: 14px;
-      padding: 6px 0;
-    }
+    .text-link { padding: 6px 0; }
   }
 }
 
@@ -21,6 +18,8 @@
   gap: 80px;
   padding: 45px 0 70px;
   align-items: start;
+
+  > * { min-width: 0; }  // impede palavra longa de esticar a coluna da grade
 
   .detail-art {
     background: $soft;
@@ -36,6 +35,7 @@
       box-shadow: 10px 14px 24px #02020133;
     }
 
+    // Capa provisória (quando o livro não tem imagem)
     .cover {
       width: 260px;
       height: 370px;
@@ -46,34 +46,23 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      font-family: var(--display);
       box-shadow: 7px 10px 13px #382a2529;
 
-      small { font-size: 10px; letter-spacing: .14em; }
-      strong { font-size: 38px; line-height: 1.1; font-weight: 500; letter-spacing: -1px; }
-      .wave { font-size: 160px; align-self: center; font-family: Georgia, serif; line-height: .55; }
+      small { @include type(label); }
+      strong { @include type(display-3); }
     }
   }
 
   .book-info {
-    .book-eyebrow {
-      color: var(--royal);
-      font-size: 11px;
-      letter-spacing: .18em;
-    }
+    .book-eyebrow { color: var(--royal); }
 
     h1 {
-      font-family: var(--display);
-      font-size: clamp(36px, 4vw, 58px);
-      font-weight: 500;
-      line-height: 1.07;
-      letter-spacing: -.04em;
+      @include type(display-2);
       color: var(--ink);
       margin: 14px 0 10px;
     }
 
     .book-author {
-      font-size: 17px;
       color: var(--muted);
       margin: 0 0 24px;
 
@@ -86,31 +75,22 @@
       }
     }
 
-    // Section title DENTRO da ficha — pequeno, sentence case
     .book-section-title {
-      font-size: 18px;
-      font-weight: 500;
-      font-family: var(--display);
+      @include type(title);
       color: var(--ink);
-      letter-spacing: -.01em;
       margin: 28px 0 10px;
     }
 
-    .book-synopsis p {
-      font-size: 16px;
+    .book-synopsis {
       color: var(--muted);
-      margin: 0 0 12px;
       max-width: 60ch;
     }
 
-    // Botão — retangular, cor ink (como no original style.css)
+    // Botão retangular na cor ink (como no protótipo)
     .button {
-      display: inline-block;
       background: var(--ink);
       color: var(--paper) !important;
       padding: 14px 25px;
-      font-size: 15px;
-      font-weight: 500;
       border: 1px solid var(--ink);
       border-radius: 0;
       margin: 18px 0 10px;
@@ -128,32 +108,27 @@
       }
     }
 
-    .note {
-      font-size: 13px;
-      font-style: italic;
-      color: var(--muted);
-      margin: 4px 0 0;
-    }
+    .note { margin: 4px 0 0; }
 
-    // Grid de metadados: 2 colunas, UMA border-top no bloco (sem linhas entre items)
+    // Grid de metadados: 2 colunas, uma linha no topo do bloco
     .editorial-data {
       display: grid;
       grid-template-columns: 1fr 1fr;
       border-top: 1px solid var(--line);
       gap: 15px 32px;
       padding-top: 20px;
-      font-size: 14px;
       margin: 10px 0 30px;
 
       dt {
+        @include type(label);
         color: var(--muted);
-        font-size: 11px;
-        letter-spacing: .14em;
-        text-transform: uppercase;
         margin-bottom: 4px;
-        font-weight: 600;
       }
-      dd { margin: 0; color: var(--text); }
+      dd {
+        @include type(body-s);
+        margin: 0;
+        color: var(--text);
+      }
     }
 
     // Fragmento de leitura expansível
@@ -164,23 +139,24 @@
       margin-top: 10px;
 
       summary {
+        @include type(ui);
         cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
         color: var(--ink);
         list-style: revert;
       }
+
+      // Trecho do livro = citação: itálico literário
       .book-excerpt {
+        @include type(excerpt);
         padding: 20px 0 4px;
-        font-size: 16px;
-        color: var(--muted);
+        color: var(--text);
         max-width: 60ch;
       }
     }
   }
 }
 
-// Nav prev/next no bottom (original: .book-sequence)
+// Navegação anterior/próximo
 .book-sequence {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -189,30 +165,28 @@
   border-top: 1px solid var(--line);
 
   a {
-    font-size: 14px;
+    @include type(ui);
     color: var(--ink);
 
     span {
+      @include type(caption);
       display: block;
-      font-size: 13px;
       color: var(--muted);
       margin-top: 4px;
-      border-bottom: none;
     }
   }
 
   a:last-child { text-align: right; }
 }
 
-@media (max-width: 760px) {
+@media (max-width: $bp-md) {
   .book-detail {
     grid-template-columns: 1fr;
     gap: 30px;
     padding: 25px 0 48px;
 
     .detail-art { min-height: 450px; }
-    .detail-art .cover { width: 220px; height: 310px; padding: 24px; strong { font-size: 32px; } }
-    .book-info h1 { font-size: 36px; }
+    .detail-art .cover { width: 220px; height: 310px; padding: 24px; }
     .book-info .editorial-data { grid-template-columns: 1fr; }
   }
 

@@ -2,6 +2,7 @@
 // home.scss — carrossel + manifesto + home-books + team-preview
 // =============================================================
 @use 'variables' as *;
+@use 'typography' as *;
 
 .banner-carousel {
   padding: 28px 0 36px;
@@ -42,15 +43,13 @@
     color: #f9f1ea;
     width: 100%;
   }
+
+  .banner-title { color: inherit; }
 }
 
 .banner-title {
-  font-family: var(--display);
-  font-size: clamp(30px, 3.8vw, 52px);
-  font-weight: 500;
-  letter-spacing: -.025em;
-  line-height: 1.22;
-  margin: 0;
+  @include type(display-2);
+  margin: 12px 0 0;
 }
 
 .banner-pagination {
@@ -68,12 +67,11 @@
   }
 
   .banner-page {
+    @include type(ui);
     background: none;
     border: 1px solid var(--line);
     padding: 8px 14px;
     border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
     color: var(--muted);
 
     &[aria-current='true'] {
@@ -84,22 +82,13 @@
   }
 
   .banner-position {
-    font-size: 13px;
+    @include type(caption);
     color: var(--muted);
   }
 }
 
-// Home — bloco de livros
 .home-books {
   padding: 20px 0 48px;
-
-  .section-heading {
-    h2 {
-      font-family: var(--display);
-      font-weight: 500;
-      letter-spacing: -.03em;
-    }
-  }
 }
 
 // Manifesto — bloco azul royal
@@ -118,29 +107,24 @@
 
   // Til grande que aparece na coluna esquerda do manifesto
   .til {
+    display: block;
     width: 180px;
     height: 62px;
     margin-top: 54px;
-    color: #f9f1ea;  // o símbolo herda via currentColor (mask)
+    color: #f9f1ea;
   }
 
   h2 {
-    font-family: var(--literary);
-    font-style: italic;
-    font-size: clamp(28px, 3.2vw, 44px);
-    font-weight: 500;
+    @include type(quote);
     max-width: 950px;
     margin: 0 0 20px;
     color: #f9f1ea;
-    letter-spacing: 0;
   }
 
   p {
     max-width: 68ch;
     margin: 0 0 20px;
-    line-height: 1.7;
     color: #e4dfdb;
-    font-size: 17px;
   }
 
   .text-link {
@@ -158,19 +142,19 @@
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: $bp-md) {
   .home-banner.banner-image {
     min-height: 340px;
     .banner-content {
       padding: 24px 20px;
     }
   }
-  .banner-title { font-size: clamp(24px, 6.4vw, 32px); }
+  // Frases do manifesto são longas: no mobile o banner desce um degrau na escala.
+  .banner-title { font-size: var(--size-display-3); }
   .manifesto {
     padding: 44px 0;
     .shell { grid-template-columns: 1fr; gap: 16px; }
-    h2 { font-size: 28px; }
-    p { font-size: 16px; }
+    .til { display: none; }
   }
   .team-preview { padding: 36px 0; }
 }

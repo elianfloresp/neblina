@@ -79,7 +79,7 @@ $next  = ($pos !== false && $pos < count($ids) - 1) ? get_post($ids[$pos + 1]) :
             <?php endif; ?>
 
             <h2 class="book-section-title"><?php echo neblina_lang() === 'pt' ? 'Sobre o livro' : 'Sobre el libro'; ?></h2>
-            <div class="book-synopsis">
+            <div class="book-synopsis rich-text">
                 <?php echo $sinopse ? wp_kses_post($sinopse) : '<p>' . esc_html(neblina_i('to_confirm')) . '</p>'; ?>
             </div>
 
@@ -112,7 +112,7 @@ $next  = ($pos !== false && $pos < count($ids) - 1) ? get_post($ids[$pos + 1]) :
             <?php if ($excerto): ?>
                 <details>
                     <summary><?php echo neblina_i('read_excerpt'); ?></summary>
-                    <div class="book-excerpt"><?php echo wp_kses_post($excerto); ?></div>
+                    <div class="book-excerpt rich-text"><?php echo wp_kses_post($excerto); ?></div>
                 </details>
             <?php endif; ?>
         </div>

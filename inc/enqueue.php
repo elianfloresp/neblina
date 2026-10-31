@@ -14,23 +14,31 @@ if (!defined('ABSPATH')) exit;
 /**
  * CSS/JS do site público.
  */
-function neblina_enqueue_assets() {
-    $v = NEBLINA_VERSION;
+/**
+ * Versão do asset = data de modificação do arquivo, pra o navegador
+ * baixar o CSS/JS novo a cada build sem precisar de Ctrl+F5.
+ */
+function neblina_asset_version($relative_path) {
+    $path = NEBLINA_DIR . $relative_path;
+    return file_exists($path) ? (string) filemtime($path) : NEBLINA_VERSION;
+}
 
-    // Google Fonts (fallbacks oficiais do protótipo)
+function neblina_enqueue_assets() {
+    // Só os pesos usados pelo sistema tipográfico (styles/scss/_typography.scss):
+    // Manrope 500 (títulos) · DM Sans 400/500/600 + itálico 400 (texto e interface).
     wp_enqueue_style(
         'neblina-google-fonts',
-        'https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=Manrope:wght@500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap',
         [],
         null
     );
 
-    // CSS global (reset, variáveis, header, footer, utilitários)
+    // CSS global (reset, tokens, header, footer, componentes)
     wp_enqueue_style(
         'neblina-global',
         NEBLINA_URI . '/assets/css/global.css',
         ['neblina-google-fonts'],
-        $v
+        neblina_asset_version('/assets/css/global.css')
     );
 
     // CSS específico por rota
@@ -46,14 +54,13 @@ function neblina_enqueue_assets() {
         'contact' => 'contato.css',
     ];
     if ($route && isset($route_css[$route])) {
-        $file = $route_css[$route];
-        $path = NEBLINA_DIR . '/assets/css/' . $file;
-        if (file_exists($path)) {
+        $file = '/assets/css/' . $route_css[$route];
+        if (file_exists(NEBLINA_DIR . $file)) {
             wp_enqueue_style(
                 'neblina-page-' . $route,
-                NEBLINA_URI . '/assets/css/' . $file,
+                NEBLINA_URI . $file,
                 ['neblina-global'],
-                $v
+                neblina_asset_version($file)
             );
         }
     }
@@ -63,13 +70,19 @@ function neblina_enqueue_assets() {
         'neblina-main',
         NEBLINA_URI . '/assets/js/main.js',
         [],
-        $v,
+        neblina_asset_version('/assets/js/main.js'),
         true
     );
 
     // JS específicos
     if ($route === 'home') {
-        wp_enqueue_script('neblina-carousel', NEBLINA_URI . '/assets/js/carousel.js', ['neblina-main'], $v, true);
+        wp_enqueue_script(
+            'neblina-carousel',
+            NEBLINA_URI . '/assets/js/carousel.js',
+            ['neblina-main'],
+            neblina_asset_version('/assets/js/carousel.js'),
+            true
+        );
     }
 }
 add_action('wp_enqueue_scripts', 'neblina_enqueue_assets');
