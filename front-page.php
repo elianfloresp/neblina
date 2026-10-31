@@ -43,9 +43,9 @@ $equipe = [
 ];
 ?>
 
-<section class="banner-carousel" aria-label="<?php echo esc_attr(neblina_i('primary_nav')); ?>">
+<section class="banner-carousel shell" aria-label="<?php echo esc_attr(neblina_lang() === 'pt' ? 'Destaques da Neblina' : 'Destacados de Neblina'); ?>">
     <?php if (empty($banners)): ?>
-        <div class="shell banner-empty">
+        <div class="banner-empty">
             <div class="banner-content">
                 <span class="eyebrow"><?php echo neblina_lang() === 'pt' ? 'MANIFESTO NEBLINA' : 'MANIFIESTO NEBLINA'; ?></span>
                 <h1 class="banner-title"><?php echo neblina_lang() === 'pt'
@@ -75,7 +75,7 @@ $equipe = [
             <?php endforeach; ?>
         </div>
         <?php if (count($banners) > 1): ?>
-            <div class="banner-pagination shell">
+            <div class="banner-pagination">
                 <div class="banner-pages">
                     <?php foreach ($banners as $i => $banner): ?>
                         <button class="banner-page" data-banner-page="<?php echo $i; ?>" aria-current="<?php echo $i === 0 ? 'true' : 'false'; ?>">

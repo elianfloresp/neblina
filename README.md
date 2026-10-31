@@ -152,7 +152,8 @@ Fonte única de verdade: `styles/scss/_typography.scss`. Todo texto usa um **pap
 | Papel | Fonte | Tamanho (desktop → mobile) | Uso |
 |---|---|---|---|
 | `display-1` | display | 76 → 44px | Título de página |
-| `display-2` | display | 56 → 34px | Título do livro, banner |
+| `display-2` | display | 56 → 34px | Título do livro |
+| `headline` | display | 52 → 25px | Frase longa sobre imagem (banner) |
 | `display-3` | display | 40 → 27px | Título de seção |
 | `display-4` | display | 24 → 22px | Título de card (livro, autor, pessoa) |
 | `title` | display | 20px | Subtítulo dentro do conteúdo ("Sobre o livro") |

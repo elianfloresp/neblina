@@ -23,6 +23,7 @@
   --size-display-2: clamp(34px, 4vw, 56px);
   --size-display-3: clamp(27px, 2.8vw, 40px);
   --size-display-4: 24px;
+  --size-headline:  clamp(30px, 3.8vw, 52px);
   --size-title:     20px;
   --size-quote:     clamp(30px, 3.4vw, 46px);
   --size-lead:      clamp(20px, 2.1vw, 28px);
@@ -36,6 +37,7 @@
 
 @mixin type-tokens-mobile {
   --size-display-4: 22px;
+  --size-headline:  clamp(25px, 6.4vw, 34px);
   --size-body-l:    18px;
   --size-body:      16px;
   --size-label:     11px;
@@ -48,6 +50,7 @@ $type-scale: (
   'display-3': (family: display, size: display-3, line: 1.15, track: -.03em),  // título de seção
   'display-4': (family: display, size: display-4, line: 1.2,  track: -.02em),  // título de card
   'title':     (family: display, size: title,     line: 1.35, track: -.01em),  // subtítulo dentro de conteúdo
+  'headline':  (family: display, size: headline,  line: 1.22, track: -.025em), // frase longa sobre imagem (banner)
 
   // Literário (serifa, sempre itálico)
   'quote':     (family: literary, size: quote,  line: 1.22, track: -.01em, style: italic),  // manifesto
