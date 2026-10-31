@@ -12,7 +12,11 @@ $current_url_other = neblina_switch_lang_url($other_lang);
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="<?php echo esc_url(NEBLINA_URI . '/assets/images/brand/symbol.png'); ?>">
+    <?php $favicon_dir = NEBLINA_URI . '/assets/images/favicon'; ?>
+    <link rel="icon" href="<?php echo esc_url($favicon_dir . '/favicon.ico'); ?>" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo esc_url($favicon_dir . '/favicon-32.png'); ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?php echo esc_url($favicon_dir . '/icon-192.png'); ?>">
+    <link rel="apple-touch-icon" href="<?php echo esc_url($favicon_dir . '/apple-touch-icon.png'); ?>">
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
