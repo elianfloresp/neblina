@@ -88,7 +88,12 @@ neblina/
 │   ├── rewrite.php               Rewrite /pt/ e /es/, redirect por Accept-Language, cookie
 │   ├── enqueue.php               CSS/JS + Google Fonts
 │   ├── cpts.php                  Registra Livro, Autor, Banner
-│   └── acf-fields.php            Campos ACF registrados via PHP (Tabs PT/ES/Comum)
+│   ├── acf-fields.php            Campos ACF registrados via PHP (Tabs PT/ES/Comum/Venda)
+│   ├── woocommerce.php           Livro → produto do WooCommerce (sync automático)
+│   └── admin.php                 Menu do admin enxuto (esconde Posts, Páginas, Produtos…)
+│
+├── tools/
+│   └── setup-loja.php            Configuração base do WooCommerce (rodar via CLI)
 │
 ├── template-parts/               Partials reutilizáveis
 │   ├── book-grid.php             Grade de livros + paginação (home, catálogo, "Outras fichas")
@@ -180,12 +185,14 @@ Todos registrados em `inc/cpts.php`. Grupos ACF registrados em `inc/acf-fields.p
 | `excerto_pt` / `excerto_es` | wysiwyg | PT / ES |
 | `metadados_tradutor_pt/es` | text | PT / ES |
 | `metadados_formato_pt/es` | text | PT / ES |
-| `link_compra_pt` / `link_compra_es` | url | PT / ES |
 | `autor_nome` | text (nome exibido no card e na ficha) | Comum |
 | `autor_relacionado` | post object → autor (opcional, vira link) | Comum |
-| `metadados_isbn` | text | Comum |
+| `metadados_isbn` | text (também vira o SKU do produto) | Comum |
 | `metadados_paginas` | number | Comum |
 | `metadados_ano` | number | Comum |
+| `venda_preco` | number, € com IVA (vazio = "Disponível em breve") | Venda |
+| `venda_estoque` | number (mostra o estoque real do produto) | Venda |
+| `venda_peso` | number, gramas | Venda |
 | Capa | imagem destacada nativa | — |
 
 ### Autor
@@ -207,6 +214,39 @@ Todos registrados em `inc/cpts.php`. Grupos ACF registrados em `inc/acf-fields.p
 | `link_destino` | url | Comum |
 | Imagem de fundo | imagem destacada nativa | — |
 | Ordem | atributo "Ordem" nativo | — |
+
+---
+
+## 🛒 Loja (WooCommerce)
+
+O cliente **não cadastra produtos**: cada Livro tem um produto "espelho" no WooCommerce, criado e atualizado sozinho ao salvar o livro (`inc/woocommerce.php`).
+
+| No Livro | No produto |
+|---|---|
+| Título ES (ou título do post) | Nome base; no carrinho/checkout aparece o título no idioma do visitante |
+| Imagem destacada | Imagem do produto |
+| `venda_preco` / `venda_estoque` / `venda_peso` | Preço, estoque (gerenciado) e peso |
+| `metadados_isbn` | SKU (se repetido em outro produto, fica sem SKU) |
+| Publicado / rascunho / lixeira / excluído | Mesmo status no produto |
+
+- O **estoque** vive no produto (baixa a cada venda). A aba Venda sempre mostra o valor atual, então salvar o livro não desfaz vendas.
+- Produtos ficam com visibilidade "oculta". `/produto/...` redireciona pra ficha do livro; `/loja/` e categorias, pro catálogo.
+- Ficha do livro: preço + "Adicionar ao carrinho" (POST pra própria ficha, volta com aviso "adicionado"); estoque 0 → "Esgotado"; sem preço → "Disponível em breve".
+- Admin: o menu Produtos fica escondido (`inc/admin.php`); a lista de Livros mostra colunas Preço e Estoque.
+
+### Configuração base
+
+`tools/setup-loja.php` aplica (e pode ser rodado de novo, inclusive no servidor):
+
+```bash
+php wp-content/themes/neblina/tools/setup-loja.php
+```
+
+- EUR no formato `18,90 €`, venda e entrega só na UE, compra como convidado, sem avaliações/cupons.
+- Preço com IVA incluído e **o mesmo em toda a UE** (filtro `woocommerce_adjust_non_base_location_prices` em `inc/woocommerce.php`).
+- Pedidos em HPOS (tabelas novas do Woo).
+
+⚠️ **Valores FICTÍCIOS até o cliente confirmar** (marcados no script): endereço da loja, IVA 4%, frete (Espanha peninsular 4,90 €, grátis acima de 40 €; Baleares 8,90 €; resto da UE 14,90 €; Canárias/Ceuta/Melilla sem entrega), pagamento só por transferência com IBAN de exemplo, e preços/estoques dos 3 livros.
 
 ---
 
@@ -250,7 +290,9 @@ Padrão simples inspirado em Conventional Commits:
 - ✅ CPTs e grupos ACF; conteúdo do protótipo cadastrado (3 livros, 7 autores, 6 banners)
 - ✅ Favicon a partir do símbolo do til
 - 🔴 Fontes oficiais bloqueadas: a Mundial Narrow comprada tem licença **desktop** (proíbe `@font-face`) e a Atlantix SSi veio de agregador sem licença. Falta licença webfont.
-- 🟡 Checkout WooCommerce (EUR only) em configuração
+- ✅ WooCommerce: base configurada, Livro → produto sincronizado, botão "Adicionar ao carrinho"
+- 🟡 Carrinho e checkout no visual do site (PT/ES), e-mails no idioma do comprador
+- 🟡 Gateway de pagamento real, frete e IVA definitivos: aguardando cliente
 - 🔴 Deploy pendente de contratação de hospedagem pelo cliente
 
 **Prazo:** 12-13/11/2026.

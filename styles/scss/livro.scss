@@ -48,6 +48,33 @@
   p a:hover { color: var(--hover-ink); }
 }
 
+// --- Compra ---
+.book-buy {
+  margin-top: 30px;
+
+  form { margin: 0; }
+  .note { margin-top: 12px; font-size: 13px; }
+}
+
+.book-info .book-price {
+  font: var(--weight-display) 28px/1.2 var(--font-display);
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.shop-notice {
+  border-left: 3px solid var(--green);
+  background: var(--soft);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: var(--text);
+
+  &.is-error { border-left-color: var(--brick); }
+  .text-link { margin-left: 6px; }
+}
+
 .editorial-data {
   display: grid;
   grid-template-columns: 1fr 1fr;
