@@ -150,6 +150,11 @@ function neblina_i($key) {
             'added_to_cart'    => ['es' => 'Libro añadido al carrito.',    'pt' => 'Livro adicionado ao carrinho.'],
             'see_cart'         => ['es' => 'Ver carrito',                  'pt' => 'Ver carrinho'],
             'sold_out'         => ['es' => 'Agotado',                      'pt' => 'Esgotado'],
+            'last_copies'      => ['es' => 'Últimos %d ejemplares.',       'pt' => 'Últimos %d exemplares.'],
+            'last_copy'        => ['es' => 'Último ejemplar.',             'pt' => 'Último exemplar.'],
+            'all_in_cart'      => ['es' => 'Ya tienes en el carrito todos los ejemplares disponibles.', 'pt' => 'Você já tem no carrinho todos os exemplares disponíveis.'],
+            'qty_less'         => ['es' => 'Quitar uno',                   'pt' => 'Diminuir um'],
+            'qty_more'         => ['es' => 'Añadir uno',                   'pt' => 'Adicionar um'],
             'vat_included'     => ['es' => 'IVA incluido. Envíos a España y la Unión Europea.', 'pt' => 'IVA incluído. Envios para Espanha e União Europeia.'],
 
             // Loja

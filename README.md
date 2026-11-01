@@ -250,6 +250,7 @@ O cliente **não cadastra produtos**: cada Livro tem um produto "espelho" no Woo
 - **Idioma:** `neblina_switch_locale()` (`inc/i18n.php`) troca o WordPress/Woo pra `es_ES` ou `pt_BR` conforme a URL; nas chamadas AJAX da loja usa a página de origem. O admin fica em português. Textos que o Woo guarda num idioma só (privacidade, título/descrição/instrução da transferência) passam por `neblina_i()`.
 - O pedido grava `_neblina_lang` (idioma de quem comprou).
 - Frete grátis, quando disponível, é a única opção. Link "Carrinho (n)" no header.
+- **Quantidade:** seletor − 1 + (`woocommerce/global/quantity-input.php` + `assets/js/loja.js`) na ficha e no carrinho. O máximo é o estoque menos o que já está no carrinho; com tudo no carrinho, a ficha mostra "Ver carrinho". Com 3 ou menos em estoque (aviso de estoque baixo do Woo), a ficha mostra "Últimos N exemplares". No carrinho, mudar a quantidade atualiza sozinho.
 
 ### Configuração base
 

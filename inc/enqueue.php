@@ -77,6 +77,17 @@ function neblina_enqueue_assets() {
     );
 
     // JS específicos
+    if (in_array($route, ['book', 'cart'], true)) {
+        wp_enqueue_script(
+            'neblina-loja',
+            NEBLINA_URI . '/assets/js/loja.js',
+            $route === 'cart' ? ['jquery'] : [],   // no carrinho escuta os eventos do Woo
+
+            neblina_asset_version('/assets/js/loja.js'),
+            true
+        );
+    }
+
     if ($route === 'home') {
         wp_enqueue_script(
             'neblina-carousel',

@@ -68,10 +68,28 @@ $book_title = fn($id) => neblina_field('titulo', $id) ?: get_the_title($id);
                 <?php neblina_print_shop_notices(); ?>
                 <?php if ($a_venda): ?>
                     <p class="book-price"><?php echo wp_kses_post(wc_price(wc_get_price_to_display($produto))); ?></p>
-                    <?php if ($produto->is_in_stock()): ?>
-                        <form method="post" action="<?php echo esc_url(neblina_url('livro', $livro->post_name)); ?>">
-                            <button class="button" type="submit" name="add-to-cart" value="<?php echo esc_attr($produto->get_id()); ?>"><?php echo neblina_i('add_to_cart'); ?></button>
-                        </form>
+                    <?php if ($produto->is_in_stock()):
+                        $estoque     = $produto->get_stock_quantity();
+                        $poucos      = $estoque !== null && $estoque <= (int) get_option('woocommerce_notify_low_stock_amount', 3);
+                        $no_carrinho = WC()->cart ? (WC()->cart->get_cart_item_quantities()[$produto->get_id()] ?? 0) : 0;
+                        $disponivel  = $estoque === null ? -1 : max(0, $estoque - $no_carrinho); ?>
+                        <?php if ($disponivel === 0): ?>
+                            <a class="button" href="<?php echo esc_url(wc_get_cart_url()); ?>"><?php echo neblina_i('see_cart'); ?></a>
+                            <p class="book-stock"><?php echo neblina_i('all_in_cart'); ?></p>
+                        <?php else: ?>
+                            <form class="book-buy-form" method="post" action="<?php echo esc_url(neblina_url('livro', $livro->post_name)); ?>">
+                                <?php woocommerce_quantity_input([
+                                    'min_value'    => 1,
+                                    'max_value'    => $disponivel,
+                                    'input_value'  => 1,
+                                    'product_name' => $titulo,
+                                ], $produto); ?>
+                                <button class="button" type="submit" name="add-to-cart" value="<?php echo esc_attr($produto->get_id()); ?>"><?php echo neblina_i('add_to_cart'); ?></button>
+                            </form>
+                        <?php endif; ?>
+                        <?php if ($poucos && $disponivel !== 0): ?>
+                            <p class="book-stock"><?php printf(esc_html(neblina_i($estoque === 1 ? 'last_copy' : 'last_copies')), (int) $estoque); ?></p>
+                        <?php endif; ?>
                         <p class="note"><?php echo neblina_i('vat_included'); ?></p>
                     <?php else: ?>
                         <button class="button" type="button" disabled><?php echo neblina_i('sold_out'); ?></button>

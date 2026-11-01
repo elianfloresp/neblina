@@ -3,6 +3,7 @@
 // =============================================================
 @use 'variables' as *;
 @use 'shop-notice' as *;
+@use 'qty-stepper';
 
 .book-back { padding-top: 30px; }
 
@@ -55,6 +56,21 @@
 
   form { margin: 0; }
   .note { margin-top: 12px; font-size: 13px; }
+}
+
+.book-buy-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: stretch;
+
+  .button { min-height: 48px; }
+}
+
+.book-info .book-stock {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--brick);
 }
 
 .book-info .book-price {
