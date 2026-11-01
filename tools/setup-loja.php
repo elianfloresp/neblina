@@ -186,6 +186,84 @@ foreach (['cheque', 'cod', 'paypal'] as $gw) {
 echo "pagamento: transferência (fictícia)\n";
 
 // -----------------------------------------------------------------
+// E-mails da loja: remetente e cores da marca. Logo e rodapé vêm do tema
+// (inc/pedidos.php), no idioma do pedido.
+// Destinatário do "Novo pedido" e e-mail remetente: por enquanto o e-mail de
+// admin do WP. Trocar pelo da Neblina quando o cliente informar.
+// -----------------------------------------------------------------
+foreach ([
+    'woocommerce_email_from_name'        => 'Neblina Editorial',
+    'woocommerce_email_base_color'       => '#324483',
+    'woocommerce_email_background_color' => '#f9f1ea',
+    'woocommerce_email_body_background_color' => '#ffffff',
+    'woocommerce_email_text_color'       => '#222221',
+] as $name => $value) {
+    update_option($name, $value);
+}
+echo "e-mails: remetente + cores\n";
+
+// -----------------------------------------------------------------
+// Fatura e guia de remessa (PDF Invoices & Packing Slips)
+// Dados fiscais — FICTÍCIO até o cliente informar (razão social, NIF, endereço).
+// -----------------------------------------------------------------
+if (function_exists('WPO_WCPDF')) {
+    // Logo da fatura: o do tema, copiado uma vez pra Biblioteca de Mídia.
+    $logo_id = (int) get_option('neblina_invoice_logo_id');
+    if (!$logo_id || !get_post($logo_id)) {
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        $tmp = wp_tempnam('logo-dark.png');
+        copy(get_template_directory() . '/assets/images/brand/logo-dark.png', $tmp);
+        $logo_id = media_handle_sideload(['name' => 'neblina-logo-fatura.png', 'tmp_name' => $tmp], 0, 'Neblina Editorial — logo da fatura');
+        update_option('neblina_invoice_logo_id', is_wp_error($logo_id) ? 0 : $logo_id);
+    }
+
+    $general = (array) get_option('wpo_wcpdf_settings_general', []);
+    update_option('wpo_wcpdf_settings_general', array_merge($general, [
+        'paper_size'               => 'a4',
+        'header_logo'              => (string) $logo_id,
+        'header_logo_height'       => '14mm',
+        'shop_name'                => ['default' => 'Neblina Editorial (FICTÍCIO S.L.)'],
+        'vat_number'               => ['default' => 'B00000000'],
+        'shop_address_line_1'      => ['default' => 'Calle de Ejemplo, 1'],
+        'shop_address_city'        => ['default' => 'Madrid'],
+        'shop_address_postcode'    => ['default' => '28001'],
+        'shop_address_state'       => ['default' => 'Madrid'],
+        'shop_address_country'     => ['default' => 'ES'],
+        'shop_email_address'       => ['default' => get_option('admin_email')],
+        'footer'                   => ['default' => 'Neblina Editorial · editorialneblina.com'],
+    ]));
+
+    $invoice = (array) get_option('wpo_wcpdf_documents_settings_invoice', []);
+    update_option('wpo_wcpdf_documents_settings_invoice', array_merge($invoice, [
+        'enabled'                  => 1,
+        // Vai anexa ao e-mail de pagamento confirmado ("Processando").
+        'attach_to_email_ids'      => ['customer_processing_order' => 1],
+        'display_shipping_address' => 'when_different',
+        'display_email'            => 1,
+        'display_phone'            => 1,
+        'display_date'             => 'document_date',
+        'display_number'           => 'invoice_number',
+        'number_format'            => ['prefix' => '[invoice_year]-', 'suffix' => '', 'padding' => '4'],   // 2026-0001
+        'reset_number_yearly'      => 1,
+        'my_account_buttons'       => 'never',
+    ]));
+
+    $slip = (array) get_option('wpo_wcpdf_documents_settings_packing-slip', []);
+    update_option('wpo_wcpdf_documents_settings_packing-slip', array_merge($slip, [
+        'enabled'                  => 1,
+        'display_billing_address'  => 'when_different',
+        'display_email'            => 1,
+        'display_phone'            => 1,
+        'display_customer_notes'   => 1,
+    ]));
+
+    delete_transient('wpo_wcpdf_new_install');   // sem o assistente de instalação
+    echo "fatura: dados (fictícios), numeração 2026-0001, guia de remessa\n";
+}
+
+// -----------------------------------------------------------------
 // Carrinho e checkout clássicos (shortcode), renderizados pelo tema em
 // /es/carrito/, /pt/carrinho/ e /{lang}/finalizar-compra/. Os blocos do Woo
 // não seguem o visual nem o idioma da URL.

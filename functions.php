@@ -62,4 +62,5 @@ require NEBLINA_DIR . '/inc/enqueue.php';
 require NEBLINA_DIR . '/inc/cpts.php';
 require NEBLINA_DIR . '/inc/acf-fields.php';
 require NEBLINA_DIR . '/inc/woocommerce.php';
+require NEBLINA_DIR . '/inc/pedidos.php';
 require NEBLINA_DIR . '/inc/admin.php';
