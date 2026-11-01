@@ -26,6 +26,9 @@ add_filter('language_attributes', 'neblina_filter_language_attributes');
  * Idioma ativo da requisição atual.
  */
 function neblina_lang() {
+    if (!empty($GLOBALS['neblina_lang_override'])) {
+        return $GLOBALS['neblina_lang_override'];   // e-mail/fatura de um pedido (inc/pedidos.php)
+    }
     $lang = get_query_var('neblina_lang', '');
     if (in_array($lang, NEBLINA_LANGS, true)) {
         return $lang;
@@ -63,12 +66,19 @@ function neblina_request_lang() {
 }
 
 /**
+ * Locale do WordPress para cada idioma do site.
+ */
+function neblina_locale($lang) {
+    return $lang === 'pt' ? 'pt_BR' : 'es_ES';
+}
+
+/**
  * Textos do WordPress e do WooCommerce (carrinho, checkout, e-mail do pedido)
  * no idioma da URL. O admin continua em português.
  */
 function neblina_switch_locale() {
     if (is_admin() || !($lang = neblina_request_lang())) return;
-    $locale = $lang === 'pt' ? 'pt_BR' : 'es_ES';
+    $locale = neblina_locale($lang);
     if (determine_locale() !== $locale) {
         switch_to_locale($locale);
     }
@@ -171,6 +181,9 @@ function neblina_i($key) {
             'remove'           => ['es' => 'Quitar',                       'pt' => 'Remover'],
             'privacy_text'     => ['es' => 'Usaremos tus datos personales para procesar tu pedido y enviarte los libros.', 'pt' => 'Usaremos seus dados pessoais para processar o pedido e enviar os livros.'],
             'bacs_title'       => ['es' => 'Transferencia bancaria',       'pt' => 'Transferência bancária'],
+            'tracking_title'   => ['es' => 'Tu pedido está en camino',     'pt' => 'Seu pedido está a caminho'],
+            'tracking_link'    => ['es' => 'Seguir el envío',              'pt' => 'Acompanhar o envio'],
+            'email_footer'     => ['es' => 'Neblina Editorial · Literatura y pensamiento de Brasil en España', 'pt' => 'Neblina Editorial · Literatura e pensamento do Brasil na Espanha'],
             'bacs_instructions'=> ['es' => 'Usa el número de pedido como concepto de la transferencia.', 'pt' => 'Use o número do pedido como referência da transferência.'],
             'bacs_description' => ['es' => 'Realiza el pago por transferencia. Enviaremos tu pedido cuando recibamos el importe.', 'pt' => 'Faça o pagamento por transferência. Enviamos o pedido assim que o valor for recebido.'],
             'keep_shopping'    => ['es' => '← Seguir viendo libros',       'pt' => '← Continuar vendo livros'],

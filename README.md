@@ -93,6 +93,7 @@ neblina/
 │   ├── cpts.php                  Registra Livro, Autor, Banner
 │   ├── acf-fields.php            Campos ACF registrados via PHP (Tabs PT/ES/Comum/Venda)
 │   ├── woocommerce.php           Livro → produto (sync), rotas de carrinho/checkout, ajustes da loja
+│   ├── pedidos.php               Rastreio no pedido, e-mails e fatura no idioma de quem comprou
 │   └── admin.php                 Menu do admin enxuto (esconde Posts, Páginas, Produtos…)
 │
 ├── tools/
@@ -253,6 +254,20 @@ O cliente **não cadastra produtos**: cada Livro tem um produto "espelho" no Woo
 - **Carrinho flutuante** (`header.php`, `styles/scss/_cart-float.scss`, `assets/js/main.js`): com livro no carrinho, quando o header sai da tela desce um selo no canto superior direito (desktop) ou uma barra no topo (mobile) com til · Carrinho (n) · subtotal. Ao adicionar um livro, o número "pula" e o til balança. Não aparece no carrinho nem no checkout; sem animação para quem usa `prefers-reduced-motion`.
 - **Quantidade:** seletor − 1 + (`woocommerce/global/quantity-input.php` + `assets/js/loja.js`) na ficha e no carrinho. O máximo é o estoque menos o que já está no carrinho; com tudo no carrinho, a ficha mostra "Ver carrinho". Com 3 ou menos em estoque (aviso de estoque baixo do Woo), a ficha mostra "Últimos N exemplares". No carrinho, mudar a quantidade atualiza sozinho.
 
+### Pedidos, envio e fatura
+
+Fluxo da Neblina (volume baixo, envio manual):
+
+1. Venda entra → e-mail **"Novo pedido"** pra loja. Cartão: já fica **Processando** (pago). Transferência: **Aguardando** até confirmarem o dinheiro e mudarem pra Processando.
+2. Em **Processando** o cliente recebe a confirmação com a **fatura em PDF anexa**. No pedido (admin) há botões pra baixar a **fatura** e a **guia de remessa** (plugin *PDF Invoices & Packing Slips*).
+3. Fazem a etiqueta na transportadora, colam o código na caixa **Envio** do pedido (transportadora + código + link opcional; Correos tem link automático) e mudam pra **Concluído**.
+4. O cliente recebe "pedido enviado" com o rastreio.
+
+Tudo que vai pro cliente (e-mails e PDFs) sai **no idioma em que ele comprou** (`_neblina_lang`), mesmo com o admin em português: `inc/pedidos.php` troca o locale quando o e-mail/PDF é montado.
+
+- Fatura: numeração `2026-0001`, reinicia todo ano. ⚠️ Antes do lançamento, apagar os pedidos de teste e zerar a numeração (WooCommerce → PDF Invoices → Documentos → próximo número).
+- O PDF exige a extensão **GD** do PHP (as hospedagens já têm; no XAMPP é `extension=gd` no `php.ini`).
+
 ### Configuração base
 
 `tools/setup-loja.php` aplica (e pode ser rodado de novo, inclusive no servidor):
@@ -265,7 +280,7 @@ php wp-content/themes/neblina/tools/setup-loja.php
 - Preço com IVA incluído e **o mesmo em toda a UE** (filtro `woocommerce_adjust_non_base_location_prices` em `inc/woocommerce.php`).
 - Pedidos em HPOS (tabelas novas do Woo).
 
-⚠️ **Valores FICTÍCIOS até o cliente confirmar** (marcados no script): endereço da loja, IVA 4%, frete (Espanha peninsular 4,90 €, grátis acima de 40 €; Baleares 8,90 €; resto da UE 14,90 €; Canárias/Ceuta/Melilla sem entrega), pagamento só por transferência com IBAN de exemplo, e preços/estoques dos 3 livros.
+⚠️ **Valores FICTÍCIOS até o cliente confirmar** (marcados no script): dados fiscais da fatura (razão social, NIF, endereço), e-mail que recebe os pedidos e remetente (hoje o e-mail de admin do WP), endereço da loja, IVA 4%, frete (Espanha peninsular 4,90 €, grátis acima de 40 €; Baleares 8,90 €; resto da UE 14,90 €; Canárias/Ceuta/Melilla sem entrega), pagamento só por transferência com IBAN de exemplo, e preços/estoques dos 3 livros.
 
 ---
 
@@ -311,7 +326,8 @@ Padrão simples inspirado em Conventional Commits:
 - 🔴 Fontes oficiais bloqueadas: a Mundial Narrow comprada tem licença **desktop** (proíbe `@font-face`) e a Atlantix SSi veio de agregador sem licença. Falta licença webfont.
 - ✅ WooCommerce: base configurada, Livro → produto sincronizado, botão "Adicionar ao carrinho"
 - ✅ Carrinho, checkout e pedido recebido no visual do site, em PT e ES (pedido de teste completo)
-- 🟡 E-mails do pedido no idioma do comprador (inclusive os enviados pelo admin), páginas legais
+- ✅ Pedidos: rastreio, e-mails e fatura/guia de remessa no idioma do comprador
+- 🟡 Páginas legais (aguardando textos)
 - 🟡 Gateway de pagamento real, frete e IVA definitivos: aguardando cliente
 - 🔴 Deploy pendente de contratação de hospedagem pelo cliente
 

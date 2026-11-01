@@ -223,13 +223,19 @@ add_filter('woocommerce_gateway_title', function ($title, $gateway_id) {
 add_filter('woocommerce_gateway_description', function ($description, $gateway_id) {
     return $gateway_id === 'bacs' ? neblina_i('bacs_description') : $description;
 }, 10, 2);
-// Instrução da transferência (página "pedido recebido" e e-mail) não tem filtro: ajusta a instância.
-add_action('wp_loaded', function () {
-    if (is_admin() || !function_exists('WC')) return;
+/**
+ * Instrução da transferência (página "pedido recebido" e e-mail) não tem filtro:
+ * ajusta a instância do gateway pro idioma atual. Também chamada nos e-mails (inc/pedidos.php).
+ */
+function neblina_localize_bacs() {
+    if (!function_exists('WC')) return;
     $gateways = WC()->payment_gateways()->payment_gateways();
     if (isset($gateways['bacs'])) {
         $gateways['bacs']->instructions = neblina_i('bacs_instructions');
     }
+}
+add_action('wp_loaded', function () {
+    if (!is_admin()) neblina_localize_bacs();
 });
 
 // Quando o frete grátis vale (pedido acima do mínimo), ele é a única opção.
