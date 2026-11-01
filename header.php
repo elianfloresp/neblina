@@ -5,6 +5,7 @@
  */
 $lang    = neblina_lang();
 $is_home = get_query_var('neblina_route', 'home') === 'home';
+$itens   = neblina_cart_count();
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?> data-theme="light">
@@ -33,7 +34,7 @@ $is_home = get_query_var('neblina_route', 'home') === 'home';
     </nav>
 
     <div class="controls">
-        <?php if (function_exists('wc_get_cart_url')): $itens = neblina_cart_count(); ?>
+        <?php if (function_exists('wc_get_cart_url')): ?>
             <a class="cart-link" href="<?php echo esc_url(wc_get_cart_url()); ?>"<?php echo get_query_var('neblina_route') === 'cart' ? ' aria-current="page"' : ''; ?>>
                 <?php echo neblina_i('cart'); ?><?php if ($itens): ?> <span class="cart-count"><?php echo (int) $itens; ?></span><?php endif; ?>
             </a>
@@ -53,5 +54,16 @@ $is_home = get_query_var('neblina_route', 'home') === 'home';
         <button class="menu-toggle" type="button" aria-controls="navigation" aria-expanded="false"><?php echo neblina_i('menu_open'); ?></button>
     </div>
 </header>
+
+<?php // Carrinho flutuante: aparece quando o header sai da tela (assets/js/main.js). Fora do carrinho e do checkout.
+if ($itens && !in_array(get_query_var('neblina_route'), ['cart', 'checkout'], true)): ?>
+    <a class="cart-float" href="<?php echo esc_url(wc_get_cart_url()); ?>" inert>
+        <span class="cart-float-symbol brand-symbol" aria-hidden="true"></span>
+        <span class="cart-float-label"><?php echo neblina_i('cart'); ?></span>
+        <span class="cart-count"><?php echo (int) $itens; ?></span>
+        <span class="cart-float-total"><?php echo wp_kses_post(WC()->cart->get_cart_subtotal()); ?></span>
+        <span class="cart-float-go" aria-hidden="true"><?php echo neblina_i('see_short'); ?> →</span>
+    </a>
+<?php endif; ?>
 
 <main id="main" tabindex="-1">
