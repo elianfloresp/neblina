@@ -33,6 +33,11 @@ $is_home = get_query_var('neblina_route', 'home') === 'home';
     </nav>
 
     <div class="controls">
+        <?php if (function_exists('wc_get_cart_url')): $itens = neblina_cart_count(); ?>
+            <a class="cart-link" href="<?php echo esc_url(wc_get_cart_url()); ?>"<?php echo get_query_var('neblina_route') === 'cart' ? ' aria-current="page"' : ''; ?>>
+                <?php echo neblina_i('cart'); ?><?php if ($itens): ?> <span class="cart-count"><?php echo (int) $itens; ?></span><?php endif; ?>
+            </a>
+        <?php endif; ?>
         <a class="lang<?php echo $lang === 'es' ? ' is-active' : ''; ?>" lang="es"
            href="<?php echo esc_url(neblina_switch_lang_url('es')); ?>"
            aria-label="Español"<?php echo $lang === 'es' ? ' aria-current="true"' : ''; ?>>ES</a>

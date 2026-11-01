@@ -52,6 +52,8 @@ function neblina_enqueue_assets() {
         'about'   => 'sobre.css',
         'team'    => 'equipe.css',
         'contact' => 'contato.css',
+        'cart'    => 'loja.css',
+        'checkout'=> 'loja.css',
     ];
     if ($route && isset($route_css[$route])) {
         $file = '/assets/css/' . $route_css[$route];
@@ -75,6 +77,17 @@ function neblina_enqueue_assets() {
     );
 
     // JS específicos
+    if (in_array($route, ['book', 'cart'], true)) {
+        wp_enqueue_script(
+            'neblina-loja',
+            NEBLINA_URI . '/assets/js/loja.js',
+            $route === 'cart' ? ['jquery'] : [],   // no carrinho escuta os eventos do Woo
+
+            neblina_asset_version('/assets/js/loja.js'),
+            true
+        );
+    }
+
     if ($route === 'home') {
         wp_enqueue_script(
             'neblina-carousel',

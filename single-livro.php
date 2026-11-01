@@ -19,8 +19,8 @@ $titulo      = neblina_field('titulo', $livro->ID) ?: get_the_title($livro);
 $sinopse     = neblina_field('sinopse', $livro->ID);
 $excerto     = neblina_field('excerto', $livro->ID);
 $autor       = neblina_book_author($livro->ID);
-$link_compra = neblina_field('link_compra', $livro->ID);
-$buy_safe    = $link_compra && preg_match('#^https://#', $link_compra);
+$produto     = neblina_book_product($livro->ID);
+$a_venda     = $produto && $produto->get_status() === 'publish' && $produto->is_purchasable();
 
 // [rótulo ES, rótulo PT, valor] — campos vazios não aparecem na ficha
 $metadados = array_filter([
@@ -64,12 +64,41 @@ $book_title = fn($id) => neblina_field('titulo', $id) ?: get_the_title($id);
                 <div class="book-synopsis rich-text"><?php echo wp_kses_post($sinopse); ?></div>
             <?php endif; ?>
 
-            <?php if ($buy_safe): ?>
-                <a class="button" href="<?php echo esc_url($link_compra); ?>" target="_blank" rel="noopener noreferrer"><?php echo neblina_i('buy'); ?></a>
-            <?php else: ?>
-                <button class="button" type="button" disabled aria-describedby="buy-note"><?php echo neblina_i('buy_disabled'); ?></button>
-                <p class="note" id="buy-note"><?php echo neblina_i('buy_soon'); ?></p>
-            <?php endif; ?>
+            <div class="book-buy">
+                <?php neblina_print_shop_notices(); ?>
+                <?php if ($a_venda): ?>
+                    <p class="book-price"><?php echo wp_kses_post(wc_price(wc_get_price_to_display($produto))); ?></p>
+                    <?php if ($produto->is_in_stock()):
+                        $estoque     = $produto->get_stock_quantity();
+                        $poucos      = $estoque !== null && $estoque <= (int) get_option('woocommerce_notify_low_stock_amount', 3);
+                        $no_carrinho = WC()->cart ? (WC()->cart->get_cart_item_quantities()[$produto->get_id()] ?? 0) : 0;
+                        $disponivel  = $estoque === null ? -1 : max(0, $estoque - $no_carrinho); ?>
+                        <?php if ($disponivel === 0): ?>
+                            <a class="button" href="<?php echo esc_url(wc_get_cart_url()); ?>"><?php echo neblina_i('see_cart'); ?></a>
+                            <p class="book-stock"><?php echo neblina_i('all_in_cart'); ?></p>
+                        <?php else: ?>
+                            <form class="book-buy-form" method="post" action="<?php echo esc_url(neblina_url('livro', $livro->post_name)); ?>">
+                                <?php woocommerce_quantity_input([
+                                    'min_value'    => 1,
+                                    'max_value'    => $disponivel,
+                                    'input_value'  => 1,
+                                    'product_name' => $titulo,
+                                ], $produto); ?>
+                                <button class="button" type="submit" name="add-to-cart" value="<?php echo esc_attr($produto->get_id()); ?>"><?php echo neblina_i('add_to_cart'); ?></button>
+                            </form>
+                        <?php endif; ?>
+                        <?php if ($poucos && $disponivel !== 0): ?>
+                            <p class="book-stock"><?php printf(esc_html(neblina_i($estoque === 1 ? 'last_copy' : 'last_copies')), (int) $estoque); ?></p>
+                        <?php endif; ?>
+                        <p class="note"><?php echo neblina_i('vat_included'); ?></p>
+                    <?php else: ?>
+                        <button class="button" type="button" disabled><?php echo neblina_i('sold_out'); ?></button>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <button class="button" type="button" disabled aria-describedby="buy-note"><?php echo neblina_i('buy_disabled'); ?></button>
+                    <p class="note" id="buy-note"><?php echo neblina_i('buy_soon'); ?></p>
+                <?php endif; ?>
+            </div>
 
             <?php if ($metadados): ?>
                 <h2><?php echo neblina_i('editorial_info'); ?></h2>

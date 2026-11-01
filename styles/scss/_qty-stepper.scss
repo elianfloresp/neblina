@@ -1,0 +1,42 @@
+// =============================================================
+// Seletor de quantidade − 1 + (woocommerce/global/quantity-input.php).
+// Usado na ficha do livro e no carrinho.
+// =============================================================
+
+.qty-stepper {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  height: 48px;
+
+  // .input-text.qty: vence o estilo geral de campo do loja.scss
+  input.input-text.qty {
+    width: 46px;
+    min-height: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 16px;
+    text-align: center;
+    -moz-appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    &:focus { outline: 2px solid var(--royal); outline-offset: -2px; }
+  }
+}
+
+.qty-btn {
+  width: 44px;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink);
+  transition: background-color .22s, color .22s;
+
+  &:hover:not(:disabled) { background: var(--soft); color: var(--hover-ink); }
+  &:disabled { opacity: .3; cursor: not-allowed; }
+}

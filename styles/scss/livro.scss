@@ -2,6 +2,8 @@
 // livro.scss — ficha do livro (valores do protótipo v14)
 // =============================================================
 @use 'variables' as *;
+@use 'shop-notice' as *;
+@use 'qty-stepper';
 
 .book-back { padding-top: 30px; }
 
@@ -46,6 +48,41 @@
   p { color: var(--muted); font-size: 16px; }
   p a { border-bottom: 1px solid; transition: color .22s; }
   p a:hover { color: var(--hover-ink); }
+}
+
+// --- Compra ---
+.book-buy {
+  margin-top: 30px;
+
+  form { margin: 0; }
+  .note { margin-top: 12px; font-size: 13px; }
+}
+
+.book-buy-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: stretch;
+
+  .button { min-height: 48px; }
+}
+
+.book-info .book-stock {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--brick);
+}
+
+.book-info .book-price {
+  font: var(--weight-display) 28px/1.2 var(--font-display);
+  letter-spacing: -.02em;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.shop-notice {
+  @include shop-notice;
+  &.is-error { @include shop-notice-error; }
 }
 
 .editorial-data {

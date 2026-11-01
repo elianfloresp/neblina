@@ -87,6 +87,8 @@ function neblina_template_include($template) {
         'about'   => 'page-sobre.php',
         'team'    => 'page-equipe.php',
         'contact' => 'page-contato.php',
+        'cart'    => 'page-carrinho.php',     // rotas da loja: inc/woocommerce.php
+        'checkout'=> 'page-checkout.php',
     ];
 
     if (isset($map[$route])) {

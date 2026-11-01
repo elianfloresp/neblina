@@ -131,6 +131,29 @@ img { max-width: 100%; height: auto; }
   font-size: 14px;
 }
 
+.cart-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 2px;
+  margin-right: 8px;
+  transition: color .22s;
+
+  &:hover, &[aria-current='page'] { color: var(--hover-ink); }
+}
+
+.cart-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--royal);
+  color: #f9f1ea;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+}
+
 .lang {
   padding: 6px 2px;
   opacity: .6;

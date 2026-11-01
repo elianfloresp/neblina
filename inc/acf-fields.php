@@ -31,8 +31,6 @@ add_action('acf/init', function () {
             ['key' => 'field_livro_excerto_pt',      'label' => 'Trecho de leitura (PT)', 'name' => 'excerto_pt', 'type' => 'wysiwyg', 'tabs' => 'visual', 'media_upload' => 0, 'instructions' => 'Opcional. Aparece no "Fragmento de leitura" expansível.'],
             ['key' => 'field_livro_meta_trad_pt',    'label' => 'Tradutor (PT)',  'name' => 'metadados_tradutor_pt', 'type' => 'text'],
             ['key' => 'field_livro_meta_form_pt',    'label' => 'Formato (PT)',   'name' => 'metadados_formato_pt',  'type' => 'text', 'placeholder' => 'Ex: Capa dura'],
-            ['key' => 'field_livro_link_compra_pt',  'label' => 'Link de compra (PT)', 'name' => 'link_compra_pt', 'type' => 'url',
-                'instructions' => 'URL HTTPS da loja no mercado brasileiro. Deixa vazio pra desativar o botão em PT.'],
 
             // ---------- Aba Español ----------
             ['key' => 'field_livro_tab_es', 'label' => 'Español', 'name' => '', 'type' => 'tab', 'placement' => 'top'],
@@ -41,8 +39,6 @@ add_action('acf/init', function () {
             ['key' => 'field_livro_excerto_es',      'label' => 'Fragmento (ES)', 'name' => 'excerto_es',  'type' => 'wysiwyg', 'tabs' => 'visual', 'media_upload' => 0],
             ['key' => 'field_livro_meta_trad_es',    'label' => 'Traducción (ES)','name' => 'metadados_tradutor_es', 'type' => 'text'],
             ['key' => 'field_livro_meta_form_es',    'label' => 'Formato (ES)',   'name' => 'metadados_formato_es',  'type' => 'text', 'placeholder' => 'Ej: Tapa dura'],
-            ['key' => 'field_livro_link_compra_es',  'label' => 'Link de compra (ES)', 'name' => 'link_compra_es', 'type' => 'url',
-                'instructions' => 'URL HTTPS de la tienda en el mercado español. Dejar vacío para desactivar el botón en ES.'],
 
             // ---------- Aba Comum ----------
             ['key' => 'field_livro_tab_comum', 'label' => 'Comum (nos 2 idiomas)', 'name' => '', 'type' => 'tab', 'placement' => 'top'],
@@ -57,6 +53,20 @@ add_action('acf/init', function () {
             ['key' => 'field_livro_meta_ano',     'label' => 'Ano',     'name' => 'metadados_ano',     'type' => 'number'],
             ['key' => 'field_livro_dica_capa', 'label' => '', 'type' => 'message',
                 'message' => '<strong>Capa:</strong> use o campo nativo <em>Imagem destacada</em> do WordPress (coluna da direita).'],
+
+            // ---------- Aba Venda (sincronizada com o produto do WooCommerce, ver inc/woocommerce.php) ----------
+            ['key' => 'field_livro_tab_venda', 'label' => 'Venda', 'name' => '', 'type' => 'tab', 'placement' => 'top'],
+            ['key' => 'field_livro_venda_preco', 'label' => 'Preço', 'name' => 'venda_preco', 'type' => 'number',
+                'min' => 0, 'step' => 0.01, 'append' => '€',
+                'instructions' => 'Com IVA incluído. Deixe vazio enquanto o livro não estiver à venda: o botão aparece como "Disponível em breve".'],
+            ['key' => 'field_livro_venda_estoque', 'label' => 'Estoque', 'name' => 'venda_estoque', 'type' => 'number',
+                'min' => 0, 'step' => 1, 'default_value' => 0,
+                'instructions' => 'Quantidade disponível. Baixa sozinho a cada venda; com 0 a ficha mostra "Esgotado".'],
+            ['key' => 'field_livro_venda_peso', 'label' => 'Peso', 'name' => 'venda_peso', 'type' => 'number',
+                'min' => 0, 'step' => 1, 'append' => 'g',
+                'instructions' => 'Peso do livro embalado.'],
+            ['key' => 'field_livro_dica_venda', 'label' => '', 'type' => 'message',
+                'message' => 'Ao salvar o livro, o produto da loja é criado ou atualizado automaticamente (título, capa, preço, estoque, peso e ISBN). Não é preciso cadastrar nada no WooCommerce.'],
         ],
     ]);
 

@@ -6,9 +6,9 @@
  * Autor:    idem.
  * Banner:   admin-only, usado só na home (sem single).
  *
- * Grupos ACF devem ser criados no admin WP depois (Custom Fields > Add New).
+ * Campos ACF registrados em inc/acf-fields.php.
  * Padrão de naming dos campos: {nome}_pt e {nome}_es.
- * Ex: titulo_pt, titulo_es, sinopse_pt, sinopse_es, autor_relacionado, capa, link_compra.
+ * Ex: titulo_pt, titulo_es, sinopse_pt, sinopse_es, autor_relacionado, venda_preco.
  */
 
 if (!defined('ABSPATH')) exit;
