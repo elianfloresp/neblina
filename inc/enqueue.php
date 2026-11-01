@@ -52,6 +52,8 @@ function neblina_enqueue_assets() {
         'about'   => 'sobre.css',
         'team'    => 'equipe.css',
         'contact' => 'contato.css',
+        'cart'    => 'loja.css',
+        'checkout'=> 'loja.css',
     ];
     if ($route && isset($route_css[$route])) {
         $file = '/assets/css/' . $route_css[$route];

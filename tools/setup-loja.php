@@ -62,6 +62,10 @@ $options = [
 
     // Checkout sem conta: compra como convidado
     'woocommerce_enable_guest_checkout'   => 'yes',
+    'woocommerce_checkout_company_field'  => 'hidden',
+    'woocommerce_checkout_address_2_field'=> 'optional',
+    'woocommerce_checkout_phone_field'    => 'required',   // a transportadora pede
+    'woocommerce_ship_to_destination'     => 'billing',    // entrega no endereço de cobrança, salvo se marcar outro
     'woocommerce_enable_checkout_login_reminder' => 'no',
     'woocommerce_enable_signup_and_login_from_checkout' => 'no',
     'woocommerce_enable_myaccount_registration' => 'no',
@@ -180,6 +184,17 @@ foreach (['cheque', 'cod', 'paypal'] as $gw) {
     update_option("woocommerce_{$gw}_settings", array_merge((array) $s, ['enabled' => 'no']));
 }
 echo "pagamento: transferência (fictícia)\n";
+
+// -----------------------------------------------------------------
+// Carrinho e checkout clássicos (shortcode), renderizados pelo tema em
+// /es/carrito/, /pt/carrinho/ e /{lang}/finalizar-compra/. Os blocos do Woo
+// não seguem o visual nem o idioma da URL.
+// -----------------------------------------------------------------
+foreach (['cart' => '[woocommerce_cart]', 'checkout' => '[woocommerce_checkout]'] as $pagina => $shortcode) {
+    wp_update_post(['ID' => wc_get_page_id($pagina), 'post_content' => $shortcode]);
+}
+flush_rewrite_rules();
+echo "carrinho/checkout: clássico + rotas\n";
 
 wc_delete_shop_order_transients();
 WC_Cache_Helper::get_transient_version('shipping', true);

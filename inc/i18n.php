@@ -30,11 +30,50 @@ function neblina_lang() {
     if (in_array($lang, NEBLINA_LANGS, true)) {
         return $lang;
     }
+    if ($lang = neblina_request_lang()) {
+        return $lang;
+    }
     if (isset($_COOKIE['neblina_lang']) && in_array($_COOKIE['neblina_lang'], NEBLINA_LANGS, true)) {
         return sanitize_text_field($_COOKIE['neblina_lang']);
     }
     return NEBLINA_DEFAULT_LANG;
 }
+
+/**
+ * Idioma lido direto da URL (/es/… ou /pt/…), antes do WordPress montar a query.
+ * Nas chamadas AJAX da loja (wc-ajax e Store API), usa a página de onde veio o pedido.
+ */
+function neblina_request_lang() {
+    $home = parse_url(home_url('/'), PHP_URL_PATH) ?: '/';
+    $from_path = function ($url) use ($home) {
+        $path = parse_url($url, PHP_URL_PATH) ?: '/';
+        if (strpos($path, $home) === 0) $path = substr($path, strlen($home));
+        return preg_match('#^(es|pt)(/|$)#', ltrim($path, '/'), $m) ? $m[1] : null;
+    };
+
+    if ($lang = $from_path($_SERVER['REQUEST_URI'] ?? '/')) {
+        return $lang;
+    }
+    $loja_ajax = isset($_GET['wc-ajax']) || strpos($_SERVER['REQUEST_URI'] ?? '', '/wc/store/') !== false;
+    if ($loja_ajax && !empty($_SERVER['HTTP_REFERER'])
+        && parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST) === parse_url(home_url(), PHP_URL_HOST)) {
+        return $from_path($_SERVER['HTTP_REFERER']);
+    }
+    return null;
+}
+
+/**
+ * Textos do WordPress e do WooCommerce (carrinho, checkout, e-mail do pedido)
+ * no idioma da URL. O admin continua em português.
+ */
+function neblina_switch_locale() {
+    if (is_admin() || !($lang = neblina_request_lang())) return;
+    $locale = $lang === 'pt' ? 'pt_BR' : 'es_ES';
+    if (determine_locale() !== $locale) {
+        switch_to_locale($locale);
+    }
+}
+add_action('after_setup_theme', 'neblina_switch_locale', 1);
 
 /**
  * ACF field com sufixo de idioma. Faz fallback pro default se vazio.
@@ -112,6 +151,23 @@ function neblina_i($key) {
             'see_cart'         => ['es' => 'Ver carrito',                  'pt' => 'Ver carrinho'],
             'sold_out'         => ['es' => 'Agotado',                      'pt' => 'Esgotado'],
             'vat_included'     => ['es' => 'IVA incluido. Envíos a España y la Unión Europea.', 'pt' => 'IVA incluído. Envios para Espanha e União Europeia.'],
+
+            // Loja
+            'cart'             => ['es' => 'Carrito',                      'pt' => 'Carrinho'],
+            'checkout'         => ['es' => 'Finalizar compra',             'pt' => 'Finalizar compra'],
+            'order_received'   => ['es' => 'Pedido recibido',              'pt' => 'Pedido recebido'],
+            'cart_kicker'      => ['es' => 'TU SELECCIÓN',                 'pt' => 'SUA SELEÇÃO'],
+            'cart_title'       => ['es' => 'Carrito.',                     'pt' => 'Carrinho.'],
+            'checkout_kicker'  => ['es' => 'ÚLTIMO PASO',                  'pt' => 'ÚLTIMO PASSO'],
+            'checkout_title'   => ['es' => 'Finalizar compra.',            'pt' => 'Finalizar compra.'],
+            'order_kicker'     => ['es' => 'PEDIDO RECIBIDO',              'pt' => 'PEDIDO RECEBIDO'],
+            'order_title'      => ['es' => 'Gracias por<br>tu compra.',    'pt' => 'Obrigado pela<br>sua compra.'],
+            'remove'           => ['es' => 'Quitar',                       'pt' => 'Remover'],
+            'privacy_text'     => ['es' => 'Usaremos tus datos personales para procesar tu pedido y enviarte los libros.', 'pt' => 'Usaremos seus dados pessoais para processar o pedido e enviar os livros.'],
+            'bacs_title'       => ['es' => 'Transferencia bancaria',       'pt' => 'Transferência bancária'],
+            'bacs_instructions'=> ['es' => 'Usa el número de pedido como concepto de la transferencia.', 'pt' => 'Use o número do pedido como referência da transferência.'],
+            'bacs_description' => ['es' => 'Realiza el pago por transferencia. Enviaremos tu pedido cuando recibamos el importe.', 'pt' => 'Faça o pagamento por transferência. Enviamos o pedido assim que o valor for recebido.'],
+            'keep_shopping'    => ['es' => '← Seguir viendo libros',       'pt' => '← Continuar vendo livros'],
             'editorial_info'   => ['es' => 'Información editorial',        'pt' => 'Informações editoriais'],
             'read_excerpt'     => ['es' => 'Fragmento de lectura',         'pt' => 'Trecho de leitura'],
             'browse_books'     => ['es' => 'Navegar entre libros',         'pt' => 'Navegar entre livros'],
@@ -159,6 +215,8 @@ function neblina_route_slugs() {
             'contato'  => 'contacto',
             'livro'    => 'libro',
             'autor'    => 'autor',
+            'carrinho' => 'carrito',
+            'checkout' => 'finalizar-compra',
         ],
         'pt' => [
             'livros'   => 'livros',
@@ -168,6 +226,8 @@ function neblina_route_slugs() {
             'contato'  => 'contato',
             'livro'    => 'livro',
             'autor'    => 'autor',
+            'carrinho' => 'carrinho',
+            'checkout' => 'finalizar-compra',
         ],
     ];
 }
@@ -208,6 +268,8 @@ function neblina_switch_lang_url($new_lang) {
         'about'   => 'sobre',
         'team'    => 'equipe',
         'contact' => 'contato',
+        'cart'    => 'carrinho',
+        'checkout'=> 'checkout',
     ];
 
     // Fallback: se rota desconhecida, manda pra home do novo idioma

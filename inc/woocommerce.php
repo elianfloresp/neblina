@@ -13,6 +13,8 @@
 
 if (!defined('ABSPATH')) exit;
 
+add_action('after_setup_theme', fn() => add_theme_support('woocommerce'));
+
 const NEBLINA_META_PRODUTO = '_neblina_produto_id';
 const NEBLINA_META_LIVRO   = '_neblina_livro_id';
 
@@ -153,6 +155,109 @@ add_filter('wc_add_to_cart_message_html', function () {
     return sprintf('%s <a class="text-link" href="%s">%s</a>',
         esc_html(neblina_i('added_to_cart')), esc_url(wc_get_cart_url()), esc_html(neblina_i('see_cart')));
 });
+
+// =============================================================
+// Carrinho e checkout: /es/carrito/, /pt/carrinho/, /{lang}/finalizar-compra/
+// =============================================================
+
+// As rotas abrem as páginas Carrinho e Finalizar compra do Woo, então
+// is_cart(), is_checkout() e "pedido recebido" funcionam como no padrão.
+add_action('init', function () {
+    if (!function_exists('wc_get_page_id')) return;
+    $cart     = wc_get_page_id('cart');
+    $checkout = wc_get_page_id('checkout');
+
+    add_rewrite_rule('^(es|pt)/(carrito|carrinho)/?$',
+        "index.php?page_id={$cart}&neblina_lang=\$matches[1]&neblina_route=cart", 'top');
+    add_rewrite_rule('^(es|pt)/finalizar-compra/?$',
+        "index.php?page_id={$checkout}&neblina_lang=\$matches[1]&neblina_route=checkout", 'top');
+
+    foreach (['order-received', 'order-pay'] as $endpoint) {
+        $slug = get_option('woocommerce_checkout_' . str_replace('-', '_', $endpoint) . '_endpoint', $endpoint);
+        add_rewrite_rule("^(es|pt)/finalizar-compra/{$slug}/([0-9]+)/?$",
+            "index.php?page_id={$checkout}&neblina_lang=\$matches[1]&neblina_route=checkout&{$endpoint}=\$matches[2]", 'top');
+    }
+});
+
+// Links da loja apontam pras rotas no idioma atual.
+add_filter('woocommerce_get_cart_url',               fn() => neblina_url('carrinho'));
+add_filter('woocommerce_get_cart_page_permalink',     fn() => neblina_url('carrinho'));
+add_filter('woocommerce_get_checkout_url',           fn() => neblina_url('checkout'));
+add_filter('woocommerce_get_checkout_page_permalink', fn() => neblina_url('checkout'));
+add_filter('woocommerce_return_to_shop_redirect',    fn() => neblina_url('livros'));
+add_filter('woocommerce_return_to_shop_text',        fn() => neblina_i('see_catalog'));
+
+// Endereços padrão do Woo sem idioma (/carrinho/, /finalizar-compra/, /minha-conta/) → rotas do site.
+add_action('template_redirect', function () {
+    if (!function_exists('is_cart') || get_query_var('neblina_route')) return;
+    if (is_cart()) {
+        wp_safe_redirect(neblina_url('carrinho'), 301);
+        exit;
+    }
+    if (is_checkout() && !is_wc_endpoint_url()) {
+        wp_safe_redirect(neblina_url('checkout'), 301);
+        exit;
+    }
+    if (is_account_page()) {
+        wp_safe_redirect(neblina_home_url(), 301); // compra como convidado: sem "minha conta"
+        exit;
+    }
+});
+
+// Título da aba no idioma da rota (o das páginas do Woo é fixo em português).
+add_filter('document_title_parts', function ($parts) {
+    $route = get_query_var('neblina_route');
+    if ($route === 'cart') {
+        $parts['title'] = neblina_i('cart');
+    } elseif ($route === 'checkout') {
+        $parts['title'] = neblina_i(is_order_received_page() ? 'order_received' : 'checkout');
+    }
+    return $parts;
+});
+
+// Textos que o Woo guarda num idioma só (opções do banco) seguem o idioma da página.
+add_filter('woocommerce_get_privacy_policy_text', fn() => neblina_i('privacy_text'));
+add_filter('woocommerce_gateway_title', function ($title, $gateway_id) {
+    return $gateway_id === 'bacs' ? neblina_i('bacs_title') : $title;
+}, 10, 2);
+add_filter('woocommerce_gateway_description', function ($description, $gateway_id) {
+    return $gateway_id === 'bacs' ? neblina_i('bacs_description') : $description;
+}, 10, 2);
+// Instrução da transferência (página "pedido recebido" e e-mail) não tem filtro: ajusta a instância.
+add_action('wp_loaded', function () {
+    if (is_admin() || !function_exists('WC')) return;
+    $gateways = WC()->payment_gateways()->payment_gateways();
+    if (isset($gateways['bacs'])) {
+        $gateways['bacs']->instructions = neblina_i('bacs_instructions');
+    }
+});
+
+// Quando o frete grátis vale (pedido acima do mínimo), ele é a única opção.
+add_filter('woocommerce_package_rates', function ($rates) {
+    $gratis = array_filter($rates, fn($rate) => $rate->get_method_id() === 'free_shipping');
+    return $gratis ?: $rates;
+});
+
+// Idioma do pedido, pra e-mails futuros (ex.: "pedido enviado") saírem no idioma de quem comprou.
+add_action('woocommerce_checkout_create_order', function ($order) {
+    $order->update_meta_data('_neblina_lang', neblina_lang());
+});
+
+// CSS do Woo fora: a loja usa o visual do site (assets/css/loja.css).
+// O seletor de país vira <select> nativo (sem selectWoo).
+add_filter('woocommerce_enqueue_styles', '__return_empty_array');
+add_action('wp_enqueue_scripts', function () {
+    wp_dequeue_script('selectWoo');
+    wp_dequeue_style('select2');
+    wp_dequeue_style('wc-blocks-style');
+}, 100);
+
+/**
+ * Quantidade de livros no carrinho (para o link do header).
+ */
+function neblina_cart_count() {
+    return function_exists('WC') && WC()->cart ? (int) WC()->cart->get_cart_contents_count() : 0;
+}
 
 /**
  * Avisos da loja (adicionado ao carrinho, sem estoque…) no visual do site.

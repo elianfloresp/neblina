@@ -2,6 +2,7 @@
 // livro.scss — ficha do livro (valores do protótipo v14)
 // =============================================================
 @use 'variables' as *;
+@use 'shop-notice' as *;
 
 .book-back { padding-top: 30px; }
 
@@ -64,15 +65,8 @@
 }
 
 .shop-notice {
-  border-left: 3px solid var(--green);
-  background: var(--soft);
-  padding: 14px 18px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  color: var(--text);
-
-  &.is-error { border-left-color: var(--brick); }
-  .text-link { margin-left: 6px; }
+  @include shop-notice;
+  &.is-error { @include shop-notice-error; }
 }
 
 .editorial-data {

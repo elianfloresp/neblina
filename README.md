@@ -77,6 +77,9 @@ neblina/
 ├── page-sobre.php                Texto institucional (13 blocos, bilíngue)
 ├── page-equipe.php               Rafa, João, Paulo
 ├── page-contato.php              Email + Instagram + WhatsApp
+├── page-carrinho.php             Carrinho (/es/carrito/, /pt/carrinho/)
+├── page-checkout.php             Finalizar compra + pedido recebido
+├── woocommerce/cart/cart.php     Lista do carrinho (override do template do Woo)
 │
 ├── single-livro.php              Ficha individual de livro
 ├── single-autor.php              Perfil individual de autor
@@ -89,7 +92,7 @@ neblina/
 │   ├── enqueue.php               CSS/JS + Google Fonts
 │   ├── cpts.php                  Registra Livro, Autor, Banner
 │   ├── acf-fields.php            Campos ACF registrados via PHP (Tabs PT/ES/Comum/Venda)
-│   ├── woocommerce.php           Livro → produto do WooCommerce (sync automático)
+│   ├── woocommerce.php           Livro → produto (sync), rotas de carrinho/checkout, ajustes da loja
 │   └── admin.php                 Menu do admin enxuto (esconde Posts, Páginas, Produtos…)
 │
 ├── tools/
@@ -234,6 +237,20 @@ O cliente **não cadastra produtos**: cada Livro tem um produto "espelho" no Woo
 - Ficha do livro: preço + "Adicionar ao carrinho" (POST pra própria ficha, volta com aviso "adicionado"); estoque 0 → "Esgotado"; sem preço → "Disponível em breve".
 - Admin: o menu Produtos fica escondido (`inc/admin.php`); a lista de Livros mostra colunas Preço e Estoque.
 
+### Carrinho e checkout
+
+| Rota | Página do Woo | Template |
+|---|---|---|
+| `/es/carrito/` · `/pt/carrinho/` | Carrinho | `page-carrinho.php` + `woocommerce/cart/cart.php` |
+| `/{lang}/finalizar-compra/` | Finalizar compra | `page-checkout.php` |
+| `/{lang}/finalizar-compra/order-received/{id}/` | Pedido recebido | `page-checkout.php` (templates do Woo) |
+
+- As rotas abrem as páginas reais do Woo (`page_id`), então `is_cart()`, `is_checkout()` e os endpoints funcionam no padrão. `/carrinho/`, `/finalizar-compra/` e `/minha-conta/` sem idioma redirecionam.
+- Carrinho e checkout são os **clássicos (shortcode)**, não os blocos: seguem o visual e o idioma da URL. O CSS do Woo não é carregado; tudo está em `styles/scss/loja.scss`.
+- **Idioma:** `neblina_switch_locale()` (`inc/i18n.php`) troca o WordPress/Woo pra `es_ES` ou `pt_BR` conforme a URL; nas chamadas AJAX da loja usa a página de origem. O admin fica em português. Textos que o Woo guarda num idioma só (privacidade, título/descrição/instrução da transferência) passam por `neblina_i()`.
+- O pedido grava `_neblina_lang` (idioma de quem comprou).
+- Frete grátis, quando disponível, é a única opção. Link "Carrinho (n)" no header.
+
 ### Configuração base
 
 `tools/setup-loja.php` aplica (e pode ser rodado de novo, inclusive no servidor):
@@ -291,7 +308,8 @@ Padrão simples inspirado em Conventional Commits:
 - ✅ Favicon a partir do símbolo do til
 - 🔴 Fontes oficiais bloqueadas: a Mundial Narrow comprada tem licença **desktop** (proíbe `@font-face`) e a Atlantix SSi veio de agregador sem licença. Falta licença webfont.
 - ✅ WooCommerce: base configurada, Livro → produto sincronizado, botão "Adicionar ao carrinho"
-- 🟡 Carrinho e checkout no visual do site (PT/ES), e-mails no idioma do comprador
+- ✅ Carrinho, checkout e pedido recebido no visual do site, em PT e ES (pedido de teste completo)
+- 🟡 E-mails do pedido no idioma do comprador (inclusive os enviados pelo admin), páginas legais
 - 🟡 Gateway de pagamento real, frete e IVA definitivos: aguardando cliente
 - 🔴 Deploy pendente de contratação de hospedagem pelo cliente
 
