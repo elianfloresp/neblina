@@ -159,6 +159,7 @@ function neblina_i($key) {
 
             // Loja
             'cart'             => ['es' => 'Carrito',                      'pt' => 'Carrinho'],
+            'see_short'        => ['es' => 'Ver',                          'pt' => 'Ver'],
             'checkout'         => ['es' => 'Finalizar compra',             'pt' => 'Finalizar compra'],
             'order_received'   => ['es' => 'Pedido recibido',              'pt' => 'Pedido recebido'],
             'cart_kicker'      => ['es' => 'TU SELECCIÓN',                 'pt' => 'SUA SELEÇÃO'],
