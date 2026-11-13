@@ -237,6 +237,11 @@ O cliente **não cadastra produtos**: cada Livro tem um produto "espelho" no Woo
 - Produtos ficam com visibilidade "oculta". `/produto/...` redireciona pra ficha do livro; `/loja/` e categorias, pro catálogo.
 - Ficha do livro: preço + "Adicionar ao carrinho" (POST pra própria ficha, volta com aviso "adicionado"); estoque 0 → "Esgotado"; sem preço → "Disponível em breve".
 - Admin: o menu Produtos fica escondido (`inc/admin.php`); a lista de Livros mostra colunas Preço e Estoque.
+- **Loja fechada por padrão** (`neblina_loja_aberta()`): sem a constante, ninguém compra. As fichas mostram "Disponível em breve", o link do carrinho some e `/carrinho/` e `/finalizar-compra/` voltam pro catálogo. Pra abrir (no XAMPP e no lançamento), no `wp-config.php`:
+  ```php
+  define('NEBLINA_LOJA_ABERTA', true);
+  ```
+- O rastreio de origem das vendas do Woo (cookies `sbjs_*`) fica desligado: são cookies de análise e o site não tem aviso de cookies.
 
 ### Carrinho e checkout
 
