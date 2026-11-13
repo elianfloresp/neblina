@@ -17,6 +17,16 @@ function neblina_initials($name) {
 }
 
 /**
+ * Livro/autor publicado pelo slug da URL. Rascunho, pendente ou privado só aparece
+ * pra quem pode editar (get_page_by_path sozinho não olha o status).
+ */
+function neblina_post_by_slug($slug, $post_type) {
+    $post = $slug ? get_page_by_path($slug, OBJECT, $post_type) : null;
+    if (!$post) return null;
+    return $post->post_status === 'publish' || current_user_can('edit_post', $post->ID) ? $post : null;
+}
+
+/**
  * Autor de um livro: o cadastrado em Autores (com link) ou, se não houver,
  * o nome digitado no campo "Nome do autor" (sem link).
  *

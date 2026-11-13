@@ -19,6 +19,27 @@ const NEBLINA_META_PRODUTO = '_neblina_produto_id';
 const NEBLINA_META_LIVRO   = '_neblina_livro_id';
 
 /**
+ * Loja aberta pra compra? Fechada por padrão: as fichas mostram "Disponível em breve",
+ * o link do carrinho some e carrinho/checkout voltam pro catálogo.
+ * Abrir (local ou no lançamento): define('NEBLINA_LOJA_ABERTA', true); no wp-config.php.
+ */
+function neblina_loja_aberta() {
+    return defined('NEBLINA_LOJA_ABERTA') && NEBLINA_LOJA_ABERTA;
+}
+
+add_filter('woocommerce_is_purchasable', fn($ok) => $ok && neblina_loja_aberta());
+
+add_action('template_redirect', function () {
+    if (neblina_loja_aberta() || !in_array(get_query_var('neblina_route'), ['cart', 'checkout'], true)) return;
+    wp_safe_redirect(neblina_url('livros'));
+    exit;
+}, 5);
+
+// Rastreio de origem das vendas do Woo (cookies sbjs_*) desligado: são cookies de
+// análise, que pela lei da UE pedem consentimento, e o site não tem aviso de cookies.
+add_filter('pre_option_woocommerce_feature_order_attribution_enabled', fn() => 'no');
+
+/**
  * Produto ligado ao livro (ou null se ainda não existe).
  */
 function neblina_book_product($livro_id) {
@@ -262,6 +283,7 @@ add_action('wp_enqueue_scripts', function () {
  * Quantidade de livros no carrinho (para o link do header).
  */
 function neblina_cart_count() {
+    if (!neblina_loja_aberta()) return 0;
     return function_exists('WC') && WC()->cart ? (int) WC()->cart->get_cart_contents_count() : 0;
 }
 

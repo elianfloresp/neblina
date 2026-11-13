@@ -34,7 +34,7 @@ $itens   = neblina_cart_count();
     </nav>
 
     <div class="controls">
-        <?php if (function_exists('wc_get_cart_url')): ?>
+        <?php if (function_exists('wc_get_cart_url') && neblina_loja_aberta()): ?>
             <a class="cart-link" href="<?php echo esc_url(wc_get_cart_url()); ?>"<?php echo get_query_var('neblina_route') === 'cart' ? ' aria-current="page"' : ''; ?>>
                 <?php echo neblina_i('cart'); ?><?php if ($itens): ?> <span class="cart-count"><?php echo (int) $itens; ?></span><?php endif; ?>
             </a>

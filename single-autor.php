@@ -3,7 +3,7 @@
  * Perfil do autor — authorProfile() do protótipo.
  */
 $slug  = get_query_var('neblina_slug');
-$autor = $slug ? get_page_by_path($slug, OBJECT, 'autor') : null;
+$autor = neblina_post_by_slug($slug, 'autor');
 
 if (!$autor):
     status_header(404);

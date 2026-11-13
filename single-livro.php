@@ -3,7 +3,7 @@
  * Ficha do livro — bookPage() do protótipo.
  */
 $slug  = get_query_var('neblina_slug');
-$livro = $slug ? get_page_by_path($slug, OBJECT, 'livro') : null;
+$livro = neblina_post_by_slug($slug, 'livro');
 
 if (!$livro):
     status_header(404);
