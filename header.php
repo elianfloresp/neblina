@@ -17,6 +17,8 @@ $itens   = neblina_cart_count();
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo esc_url($favicon_dir . '/favicon-32.png'); ?>">
     <link rel="icon" type="image/png" sizes="192x192" href="<?php echo esc_url($favicon_dir . '/icon-192.png'); ?>">
     <link rel="apple-touch-icon" href="<?php echo esc_url($favicon_dir . '/apple-touch-icon.png'); ?>">
+    <?php // Aplica o tema salvo antes de pintar a página (evita piscar claro → escuro). ?>
+    <script>try{var t=localStorage.getItem('neblina-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -41,11 +43,11 @@ $itens   = neblina_cart_count();
         <?php endif; ?>
         <a class="lang<?php echo $lang === 'es' ? ' is-active' : ''; ?>" lang="es"
            href="<?php echo esc_url(neblina_switch_lang_url('es')); ?>"
-           aria-label="Español"<?php echo $lang === 'es' ? ' aria-current="true"' : ''; ?>>ES</a>
+           aria-label="ES, Español"<?php echo $lang === 'es' ? ' aria-current="true"' : ''; ?>>ES</a>
         <span aria-hidden="true">/</span>
         <a class="lang<?php echo $lang === 'pt' ? ' is-active' : ''; ?>" lang="pt"
            href="<?php echo esc_url(neblina_switch_lang_url('pt')); ?>"
-           aria-label="Português"<?php echo $lang === 'pt' ? ' aria-current="true"' : ''; ?>>PT</a>
+           aria-label="PT, Português"<?php echo $lang === 'pt' ? ' aria-current="true"' : ''; ?>>PT</a>
         <button class="theme-toggle" type="button" aria-label="<?php echo esc_attr(neblina_i('toggle_theme')); ?>" aria-pressed="false">◐</button>
     </div>
 
