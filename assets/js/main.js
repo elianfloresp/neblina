@@ -13,12 +13,21 @@
   const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.getElementById('navigation');
   if (menuToggle && nav) {
-    menuToggle.addEventListener('click', function () {
-      const open = nav.classList.toggle('open');
+    const pt = document.documentElement.lang.startsWith('pt');
+    const setMenu = function (open) {
+      nav.classList.toggle('open', open);
       menuToggle.setAttribute('aria-expanded', String(open));
-      menuToggle.textContent = open
-        ? (document.documentElement.lang.startsWith('pt') ? 'Fechar ×' : 'Cerrar ×')
-        : (document.documentElement.lang.startsWith('pt') ? 'Menu ☰' : 'Menú ☰');
+      menuToggle.textContent = open ? (pt ? 'Fechar ×' : 'Cerrar ×') : (pt ? 'Menu ☰' : 'Menú ☰');
+    };
+    menuToggle.addEventListener('click', function () {
+      setMenu(!nav.classList.contains('open'));
+    });
+    // Esc fecha o menu e devolve o foco ao botão
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('open')) {
+        setMenu(false);
+        menuToggle.focus();
+      }
     });
   }
 
@@ -27,22 +36,21 @@
   const html = document.documentElement;
   const themeBtn = document.querySelector('.theme-toggle');
 
-  // Restaura preferência salva
-  try {
-    const saved = localStorage.getItem(THEME_KEY);
-    if (saved === 'light' || saved === 'dark') {
-      html.setAttribute('data-theme', saved);
-    }
-  } catch (_) { /* localStorage pode falhar em alguns navegadores */ }
+  // O tema salvo já é aplicado por um script no <head> (header.php); aqui só sincroniza o botão.
+  const syncThemeBtn = function () {
+    if (!themeBtn) return;
+    const dark = html.getAttribute('data-theme') === 'dark';
+    themeBtn.setAttribute('aria-pressed', String(dark));
+    themeBtn.textContent = dark ? '◑' : '◐';
+  };
+  syncThemeBtn();
 
   if (themeBtn) {
     themeBtn.addEventListener('click', function () {
-      const current = html.getAttribute('data-theme') || 'light';
-      const next = current === 'light' ? 'dark' : 'light';
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
-      try { localStorage.setItem(THEME_KEY, next); } catch (_) {}
-      themeBtn.setAttribute('aria-pressed', String(next === 'dark'));
-      themeBtn.textContent = next === 'light' ? '◐' : '◑';
+      try { localStorage.setItem(THEME_KEY, next); } catch (_) { /* localStorage pode falhar */ }
+      syncThemeBtn();
     });
   }
 

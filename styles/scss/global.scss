@@ -156,10 +156,14 @@ img { max-width: 100%; height: auto; }
 }
 
 .lang {
+  position: relative;
   padding: 6px 2px;
-  opacity: .6;
+  opacity: .72; // contraste AA nos dois temas
 
   &.is-active { opacity: 1; border-bottom: 1px solid; }
+
+  // Área de toque de 44px sem mudar o desenho do header
+  &::before { content: ''; position: absolute; inset: -5px -10px; }
 }
 
 .theme-toggle {
@@ -204,6 +208,8 @@ img { max-width: 100%; height: auto; }
   display: flex;
   gap: 40px;
   font-size: 14px;
+
+  a { padding-block: 4px; }
 }
 
 .footer-bottom {
@@ -540,7 +546,7 @@ a.page-link:hover { border-color: var(--ink); color: var(--ink); }
     a[aria-current='page']::after { content: none; }
   }
 
-  .eyebrow { font-size: 10px; }
+  .eyebrow { font-size: 11px; }
 
   .page-intro { padding-top: 35px; h1 { font-size: 48px; } }
 
@@ -563,11 +569,15 @@ a.page-link:hover { border-color: var(--ink); color: var(--ink); }
   .page-link { padding: 8px 10px; }
 
   .team-grid { grid-template-columns: 1fr; gap: 32px; }
-  .team-grid .portrait { width: min(100%, 210px); max-width: 210px; }
+  // Equipe no celular: foto e texto centralizados na coluna
+  .team-grid .portrait { width: min(100%, 260px); max-width: 260px; margin-inline: auto; }
+  .team-grid .person { text-align: center; }
+  .team-grid .person p { margin-inline: auto; }
 
   .footer { padding: 24px 0 18px; }
   .footer-top, .footer-bottom { display: block; }
-  .footer-links { margin-top: 18px; gap: 12px 24px; flex-wrap: wrap; }
+  .footer-links { margin-top: 10px; gap: 0 24px; flex-wrap: wrap; }
+  .footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
   .footer-bottom { margin-top: 20px; }
   .footer-bottom span { display: block; margin: 8px 0; }
 }
